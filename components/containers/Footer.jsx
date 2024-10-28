@@ -10,7 +10,7 @@ const PopularArticles = ({ popularArticles }) => {
   if (!popularArticles || popularArticles.length === 0) return null;
   return (
     <div>
-      <p className="text-lg font-semibold mb-1">Most Popular</p>
+      <p className="text-lg text-white font-semibold mb-1">Most Popular</p>
       {popularArticles.map((item, index) => (
         <Link
           href={`/${sanitizeUrl(item.article_category)}/${sanitizeUrl(
@@ -19,7 +19,7 @@ const PopularArticles = ({ popularArticles }) => {
           title={item.imageTitle || "Title"}
           key={index}
         >
-          <p className="text-sm py-3 hover:text-purple-600 hover:border-purple-500 transition-all cursor-pointer border-b border-purple-200">
+          <p className="text-sm py-3 text-white transition-all cursor-pointer border-b border-gray-500">
             {item.title}
           </p>
         </Link>
@@ -34,7 +34,7 @@ const LatestPosts = ({ latestPosts }) => {
 
   return (
     <div>
-      <p className="text-lg font-semibold mb-1">Latest Posts</p>
+      <p className="text-lg font-semibold mb-1 text-white">Latest Posts</p>
       {latestPosts.map((item, index) => (
         <Link
           href={`/${sanitizeUrl(item.article_category)}/${sanitizeUrl(
@@ -43,7 +43,7 @@ const LatestPosts = ({ latestPosts }) => {
           title={item.imageTitle || "Title"}
           key={index}
         >
-          <p className="text-sm py-3 hover:text-purple-600 hover:border-purple-500 transition-all cursor-pointer border-b border-purple-200">
+          <p className="text-sm py-3 text-white transition-all cursor-pointer border-b border-gray-500">
             {item.title}
           </p>
         </Link>
@@ -65,19 +65,19 @@ const FooterLinks = ({ categories }) => {
           key={index}
           title={item?.title}
           href={`/${sanitizeUrl(item.title)}`}
-          className="text-sm"
+          className="text-sm text-white"
         >
           {item?.title}
         </Link>
       ))}
-      <Link title="About" href="/about" className="text-sm">
+      <Link title="About" href="/about" className="text-sm text-white ">
         About Us
       </Link>
-      <Link title="Contact Us" href="/contact" className="text-sm">
+      <Link title="Contact Us" href="/contact" className="text-sm text-white">
         Contact Us
       </Link>
       <Link title="Sitemap" href="/sitemap.xml" legacyBehavior>
-        <a title="Sitemap" onClick={handleClick} className="text-sm">
+        <a title="Sitemap" onClick={handleClick} className="text-sm text-white">
           Sitemap
         </a>
       </Link>
@@ -104,8 +104,8 @@ export default function Footer({
   );
 
   return (
-    <footer className="flex items-center flex-col mt-16">
-      <FullContainer className="bg-purple-50 py-16">
+    <footer className="flex items-center flex-col mt-16 border-t border-gray-700">
+      <FullContainer className="bg-theme py-16">
         <Container>
           <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
             <div>
@@ -118,10 +118,10 @@ export default function Footer({
         </Container>
       </FullContainer>
 
-      <FullContainer className="py-10 bg-purple-200">
+      <FullContainer className="py-10 bg-theme">
         <Container>
           <FooterLinks categories={categories} />
-          <p className="text-sm mt-5 text-center">{copyright}</p>
+          <p className="text-sm mt-5 text-center text-white">{copyright}</p>
         </Container>
       </FullContainer>
     </footer>

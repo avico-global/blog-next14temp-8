@@ -14,6 +14,7 @@ import JsonLd from "@/components/json/JsonLd";
 import useBreadcrumbs from "@/lib/useBreadcrumbs";
 import GoogleTagManager from "@/lib/GoogleTagManager";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
+import { Contact2, MailOpen, MapIcon, Phone } from "lucide-react";
 
 export default function Contact({
   categories,
@@ -87,13 +88,18 @@ export default function Contact({
                 );
               case "breadcrumbs":
                 return (
-                  <FullContainer key={index}>
-                    <Container>
-                      <Breadcrumbs breadcrumbs={breadcrumbs} className="py-7" />
-                      <h1 className="w-full text-3xl font-bold border-b mb-10">
-                        Contact Us
-                      </h1>
-                    </Container>
+                  <FullContainer
+                    key={index}
+                    className="w-full py-8 bg-gray-800 mb-10"
+                  >
+                    <h1 className="text-2xl font-semibold capitalize px-4 py-1 text-white">
+                      Contact
+                    </h1>
+                    <div className="w-24 mt-2 h-1 bg-gray-500 "></div>
+                    <Breadcrumbs
+                      breadcrumbs={breadcrumbs}
+                      className="mt-1 justify-center"
+                    />
                   </FullContainer>
                 );
               case "map":
@@ -124,13 +130,31 @@ export default function Contact({
               case "contact info":
                 return (
                   <FullContainer key={index}>
-                    <Container className="mt-10 text-center text-gray-500 text-xs gap-3">
-                      <p className="text-xl mt-3 font-bold text-black">
-                        {contact_details?.name}
-                      </p>
-                      <p>{contact_details?.email}</p>
-                      <p>{contact_details?.address}</p>
-                      <p>{contact_details?.phone}</p>
+                    <Container className=" flex lg:flex-row  mt-10 text-center text-gray-500 text-xs gap-8">
+                      <div className=" flex  items-center justify-center  border rounded-xl border-gray-500 py-6 px-4  gap-3">
+                        <Phone className=" bg-button w-14 h-14 p-2 rounded-lg  text-white " />
+
+                        <p className=" text-lg font-bold text-white  ">
+                          {contact_details?.phone}
+                        </p>
+                      </div>
+                      <div className=" flex  items-center justify-center  border rounded-xl border-gray-500 py-6 px-4  gap-3">
+                        <MailOpen className=" bg-button w-14 h-14 p-2 rounded-lg  text-white " />
+
+                        <p className=" text-lg font-bold text-white  ">
+                          {contact_details?.email}
+                        </p>
+                      </div>
+                      <div className=" flex  items-center justify-center  border rounded-xl border-gray-500 py-6 px-4  gap-3">
+                        <MapIcon className=" bg-button w-14 h-14 p-2 rounded-lg  text-white " />
+
+                        <p className=" text-lg font-bold text-white  ">
+                          {contact_details?.address}
+                        </p>
+                      </div>
+
+                     
+                      
                     </Container>
                   </FullContainer>
                 );

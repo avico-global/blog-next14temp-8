@@ -8,7 +8,7 @@ const myFont = Raleway({
 
 export default function App({ Component, pageProps }) {
   return (
-    <div className={myFont.className}>
+    <div className={`${myFont.className} bg-theme`}>
       <Component {...pageProps} />
     </div>
   );

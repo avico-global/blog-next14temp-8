@@ -118,22 +118,18 @@ export default function Home({
                   />
                 );
 
-              case "banner":
-                return (
-                  <Banner
-                    key={index}
-                    data={banner.value}
-                    image={`${imagePath}/${banner?.file_name}`}
-                    blog_list={blog_list}
-                  />
-                );
-
               case "articles":
                 return (
                   <FullContainer key={index}>
                     <Container>
-                      <div className="grid grid-cols-1 md:grid-cols-home gap-12 w-full mt-14">
+                      <div className="grid grid-cols-1  md:grid-cols-home1 lg:grid-cols-home gap-12 w-full mt-14">
                         <div className="flex flex-col gap-12">
+                          <Banner
+                            key={index}
+                            data={banner.value}
+                            image={`${imagePath}/${banner?.file_name}`}
+                            blog_list={blog_list}
+                          />
                           {page?.sections?.map((item, index) => {
                             if (!item.enable) return null;
 
@@ -162,7 +158,7 @@ export default function Home({
                                     imagePath={imagePath}
                                   />
                                 );
-                              case "articles with categories":
+
                                 return (
                                   <div key={index}>
                                     {categories?.map((category, index) => (
@@ -243,8 +239,8 @@ export default function Home({
                         </div>
                         <Rightbar
                           imagePath={imagePath}
-                          widgets={page?.widgets}
                           about_me={about_me}
+                          widgets={page?.widgets}
                           tag_list={tag_list}
                           categories={categories}
                           blog_list={blog_list}

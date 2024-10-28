@@ -111,9 +111,9 @@ export default function About({
                 return (
                   <FullContainer>
                     <Container className="pb-16 pt-8">
-                      <div className="grid grid-cols-about gap-16 w-full">
+                      <div className="grid grid-cols-about gap-16 w-full ">
                         <div
-                          className="markdown-content about_me prose max-w-full"
+                          className="markdown-content text-white about_me prose max-w-full"
                           dangerouslySetInnerHTML={{ __html: content }}
                         />
                         <Rightbar

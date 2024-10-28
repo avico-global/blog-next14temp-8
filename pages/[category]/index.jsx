@@ -120,12 +120,12 @@ export default function Category({
                 return (
                   <FullContainer
                     key={index}
-                    className="w-full py-8 bg-gray-100"
+                    className="w-full py-8 bg-gray-800"
                   >
-                    <h1 className="text-2xl font-semibold capitalize px-4 py-1">
+                    <h1 className="text-2xl font-semibold capitalize px-4 py-1 text-white">
                       {category?.replace("-", " ")}
                     </h1>
-                    <div className="w-24 mt-2 h-1 bg-gray-500"></div>
+                    <div className="w-24 mt-2 h-1 bg-gray-500 "></div>
                     <Breadcrumbs
                       breadcrumbs={breadcrumbs}
                       className="mt-1 justify-center"
@@ -137,17 +137,18 @@ export default function Category({
                 return (
                   <FullContainer key={index} className="py-16">
                     <Container>
-                      <div className="grid grid-cols-1 md:grid-cols-home gap-12 w-full">
-                        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-10">
+                      <div className="grid grid-cols-1 md:grid-cols-home gap-12 w-full ">
+                        <div className="w-full grid grid-cols-1 gap-4  border border-gray-500 p-10 rounded-xl ">
                           {filteredBlogList.map((item, index) => (
-                            <div key={index}>
+                            <div key={index} className="flex gap-4 border-b pb-5 border-gray-500">
                               <Link
                                 title={item?.title || "Article Link"}
                                 href={`/${sanitizeUrl(
                                   item.article_category
                                 )}/${sanitizeUrl(item?.title)}`}
+                                className="flex-shrink-0 w-40 lg:w-60 b"
                               >
-                                <div className="overflow-hidden relative min-h-40 rounded lg:min-h-72 w-full bg-black flex-1">
+                                <div className="overflow-hidden relative h-40 lg:h-60 rounded-lg w-full bg-black">
                                   <Image
                                     title={
                                       item.imageTitle ||
@@ -170,34 +171,35 @@ export default function Category({
                                   />
                                 </div>
                               </Link>
-
-                              <Link
-                                title={item?.title || "Article Link"}
-                                href={`/${sanitizeUrl(
-                                  item.article_category
-                                )}/${sanitizeUrl(item?.title)}`}
-                              >
-                                <h2 className="mt-2 lg:mt-3 font-bold text-lg text-inherit leading-tight hover:underline transition-all">
-                                  {item.title}
-                                </h2>
-                              </Link>
-                              <div className="flex items-center gap-2 mt-1">
-                                <p className="text-sm font-semibold">
-                                  <span className="text-gray-400 text-sm">
-                                    By
+                              <div className="flex flex-col justify-center space-y-6">
+                                <div className="flex gap-2 mt-1 ">
+                                  <p className="text-normal text-gray-300">
+                                    {item.author}
+                                  </p>
+                                  <span className="text-button font-extrabold ">
+                                    .
                                   </span>
-                                  : {item.author}
-                                </p>
-                                <span className="text-gray-400">--</span>
-                                <p className="text-sm text-gray-400 font-semibold">
-                                  {dayjs(item?.published_at)?.format(
-                                    "MMM D, YYYY"
-                                  )}
+                                  <p className="text-normal text-gray-300">
+                                    {dayjs(item?.published_at)?.format(
+                                      "MMM D, YYYY"
+                                    )}
+                                  </p>
+                                </div>
+                                <Link
+                                  title={item?.title || "Article Link"}
+                                  href={`/${sanitizeUrl(
+                                    item.article_category
+                                  )}/${sanitizeUrl(item?.title)}`}
+                                >
+                                  <h2 className="mt-2 lg:mt-0 font-bold text-lg text-inherit leading-tight hover:text-button  transition-all text-white">
+                                    {item.title}
+                                  </h2>
+                                </Link>
+
+                                <p className="text-gray-200 mt-2">
+                                  {item.tagline}
                                 </p>
                               </div>
-                              <p className="text-gray-500 mt-2">
-                                {item.tagline}
-                              </p>
                             </div>
                           ))}
                         </div>

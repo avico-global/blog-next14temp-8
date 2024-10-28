@@ -11,8 +11,8 @@ export default function MustRead({ articles, imagePath }) {
   return (
     mustReadArticles?.length > 0 && (
       <div>
-        <SectionHeading title="MUST READ" className="mb-7" />
-        <div className="grid grid-cols-1 lg:grid-cols-4 grid-rows-2 gap-x-10 gap-y-3">
+        <SectionHeading title="MUST READ"  />
+        <div className="lg:flex lg:flex-col gap-6  border border-gray-500  p-4  mt-8 lg:p-10">
           {mustReadArticles?.map((item, index) => (
             <Link
               href={`/${sanitizeUrl(item.article_category)}/${sanitizeUrl(
@@ -20,39 +20,36 @@ export default function MustRead({ articles, imagePath }) {
               )}`}
               title={item.imageTitle || "IMAGE"}
               key={index}
-              className="lg:first:col-span-4 lg:first:row-span-4 first:h-[600px] flex flex-col gap-2 text-lg first:text-xl first:mb-5"
+              className="lg:flex  gap-4 items-center w-full "
             >
-              <div
-                className={`overflow-hidden relative min-h-40 lg:min-h-32 w-full bg-gray-300 rounded-lg flex items-center flex-col ${
-                  index === 0 && "flex-1"
-                }`}
-              >
+              <div className="relative  lg:w-80 h-64   rounded-lg overflow-hidden bg-gray-300 flex-shrink-0 p-8">
                 <Image
                   title={item.imageTitle || item.title || "Article Thumbnail"}
                   alt={item.altImage || item.tagline || "No Thumbnail Found"}
                   src={`${imagePath}/${item.image}`}
                   fill={true}
                   loading="lazy"
-                  className="w-full h-full object-cover absolute top-0 scale-105"
+                  className="w-full  h-full object-cover absolute top-0 transition-transform duration-300 hover:scale-105 "
                 />
-                <p className="bg-purple-500/80 backdrop-blur-sm uppercase text-xs text-center font-semibold text-white pt-1 pb-[1px] px-4 rounded-t-md absolute bottom-0 mx-auto">
+                <p className="bg-button  backdrop-blur-sm uppercase text-xs text-center font-semibold text-white py-2 px-4 rounded-full  absolute mx-auto">
                   {item?.article_category}
                 </p>
               </div>
-              <div>
-                <p className="font-bold text-center text-inherit leading-tight hover:underline">
-                  {item.title}
-                </p>
-                <div className="flex items-center justify-center gap-2 mt-1">
-                  <p className="text-xs">
-                    <span className="text-gray-400 text-xs">By</span>:{" "}
-                    {item.author}
-                  </p>
-                  <span className="text-gray-400">--</span>
-                  <p className="text-xs text-gray-400">
+              <div className=" justify-center space-y-4 pb-10 lg:pb-0   ">
+                <div className="flex gap-2 mt-1 ">
+                  <p className=" text-sm lg:text-normal text-gray-300">{item.author}</p>
+                  <span className="text-button font-extrabold ">.</span>
+                  <p className="text-sm lg:text-normal text-gray-300">
                     {dayjs(item?.published_at)?.format("MMM D, YYYY")}
                   </p>
                 </div>
+                <p className="font-bold text-sm lg:text-lg  leading-tight  text-white hover:text-button">
+
+                  {item.title}
+                </p>
+                <p className="font-normal  text-sm lg:text-lg leading-tight  text-gray-400">
+                  {item.tagline}
+                </p>
               </div>
             </Link>
           ))}

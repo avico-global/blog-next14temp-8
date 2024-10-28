@@ -122,15 +122,6 @@ export default function Blog({
                     contact_details={contact_details}
                   />
                 );
-              case "banner":
-                return (
-                  <BlogBanner
-                    key={index}
-                    myblog={myblog}
-                    imagePath={imagePath}
-                    blog_type={blog_type}
-                  />
-                );
               case "breadcrumbs":
                 return (
                   <FullContainer key={index}>
@@ -142,13 +133,20 @@ export default function Blog({
                     </Container>
                   </FullContainer>
                 );
+
               case "blog text":
                 return (
                   <FullContainer key={index}>
                     <Container>
-                      <div className="grid grid-cols-1 md:grid-cols-article gap-14 w-full">
+                      <div className="grid  lg:grid-cols-home gap-14 w-full ">
                         <div>
-                          <article className="prose lg:prose-xl max-w-full">
+                          <BlogBanner
+                            key={index}
+                            myblog={myblog}
+                            imagePath={imagePath}
+                            blog_type={blog_type}
+                          />
+                          <article className="prose lg:prose-xl max-w-full text-white">
                             <div
                               dangerouslySetInnerHTML={{ __html: content }}
                             />

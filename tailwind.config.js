@@ -18,6 +18,8 @@ module.exports = {
     },
     extend: {
       colors: {
+        theme:"rgb(20,32,48)",
+        button:" rgb(254,95,117)",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -72,12 +74,14 @@ module.exports = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       gridTemplateColumns: {
-        home: "1fr 0.3fr",
+        home: "0.9fr 0.4fr",
+        home1: "1fr 0.2fr",
+
         article: "1fr 0.4fr",
         contact: "1fr 0.5fr",
         about: "1fr 0.4fr",
         widget: "0.5fr 1fr",
-        nav: "1fr 310px 1fr",
+        nav: "1fr 1fr 1fr",
       },
     },
   },

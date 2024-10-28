@@ -39,7 +39,7 @@ export default function Tags({
           key={index}
           title={item.tag}
           href={`/tags/${item.tag?.replaceAll(" ", "-").toLowerCase()}`}
-          className="bg-gray-200 hover:bg-gray-400 transition-all cursor-pointer rounded py-2 px-4 flex items-center gap-2"
+          className="bg-theme text-gray-300  border border-gray-500  hover:border-button hover:text-button transition-all cursor-pointer rounded py-2 px-4 flex items-center gap-2"
         >
           {item.tag}
           {item.article_ids?.length > 1 && (

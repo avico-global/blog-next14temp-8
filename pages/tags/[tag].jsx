@@ -126,7 +126,7 @@ export default function Categories({
                     <Container>
                       <div className="grid grid-cols-1 md:grid-cols-home gap-12 w-full">
                         <div>
-                          <h1 className="text-2xl font-semibold border-l-4 border-primary capitalize px-4 py-1 mb-7 w-full">
+                          <h1 className="text-2xl text-white font-semibold border-l-4 border-button capitalize px-4 py-1 mb-7 w-full">
                             Tag: {tag?.replaceAll("-", " ")}
                           </h1>
                           {filteredBlogList?.length > 0 ? (
@@ -170,25 +170,25 @@ export default function Categories({
                                     ?.replace(/ /g, "-")
                                     ?.toLowerCase()}`}
                                 >
-                                  <p className="mt-2 lg:mt-4 font-bold text-lg text-inherit leading-tight hover:underline">
+                                  <p className="mt-2 lg:mt-4 font-bold text-lg text-white text-inherit leading-tight hover:text-button">
                                     {item.title}
                                   </p>
                                 </Link>
                                 <div className="flex items-center gap-2 mt-2">
-                                  <p className="text-sm font-semibold">
-                                    <span className="text-gray-400 text-sm">
+                                  <p className="text-sm font-semibold text-gray-400">
+                                    <span className="text-gray-200 text-sm">
                                       By
                                     </span>
                                     : {item.author}
                                   </p>
-                                  <span className="text-gray-400">--</span>
-                                  <p className="text-sm text-gray-400 font-semibold">
+                                  <span className="text-gray-200">--</span>
+                                  <p className="text-sm text-gray-200 font-semibold">
                                     {dayjs(item?.published_at)?.format(
                                       "MMM D, YYYY"
                                     )}
                                   </p>
                                 </div>
-                                <p className="text-gray-500 mt-4">
+                                <p className="text-gray-300 mt-4">
                                   {item.tagline}
                                 </p>
                               </div>

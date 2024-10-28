@@ -1,218 +1,188 @@
-import React, { useState, useRef, useEffect } from "react";
-import Link from "next/link";
-import { Menu, Search } from "lucide-react";
-import { useRouter } from "next/router";
+import FullContainer from "@/components/common/FullContainer";
 import { cn } from "@/lib/utils";
-import Style1 from "./Style1";
-import Style2 from "./Style2";
-import Style3 from "./Style3";
-import Style4 from "./Style4";
-import Style5 from "./Style5";
-import Style6 from "./Style6";
-import Style7 from "./Style7";
-import Style8 from "./Style8";
-import Style9 from "./Style9";
+import { Menu, Search, X } from "lucide-react";
+import Link from "next/link";
+import React, { useState } from "react";
+import Logo from "./Logo";
 import { sanitizeUrl } from "@/lib/myFun";
+import Container from "@/components/common/Container";
 
-const Navbar = ({
+export default function Navbar({
+  staticPages,
+  filteredBlogs,
   logo,
-  nav_type,
-  imagePath,
-  blog_list,
   categories,
+  isActive,
+  searchContainerRef,
+  imagePath,
+  handleSearchToggle,
+  handleSearchChange,
+  toggleSidebar,
+  openSearch,
   category,
-}) => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [openSearch, setOpenSearch] = useState(false);
+  searchQuery,
+}) {
   const [sidebar, setSidebar] = useState(false);
-  const searchContainerRef = useRef(null);
-  const addFromRef = useRef();
-  const router = useRouter();
-  const currentPath = router.asPath;
-  const isActive = (path) => currentPath === path;
 
-  const handleSearchChange = (event) => setSearchQuery(event.target.value);
-
-  const handleSearchToggle = () => {
-    setOpenSearch((prev) => !prev);
-    if (!openSearch) setSearchQuery("");
-  };
-
-  const handleClickOutside = (event) => {
-    if (
-      searchContainerRef.current &&
-      !searchContainerRef.current.contains(event.target)
-    ) {
-      setOpenSearch(false);
-      setSearchQuery("");
-    }
-  };
-
-  useEffect(() => {
-    if (openSearch) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [openSearch]);
-
-  const toggleSidebar = () => setSidebar(!sidebar);
-
-  useEffect(() => {
-    const handleClickOutsideSidebar = (event) => {
-      if (addFromRef.current && !addFromRef.current.contains(event.target)) {
-        if (sidebar) toggleSidebar();
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutsideSidebar);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutsideSidebar);
-    };
-  }, [sidebar]);
-
-  const filteredBlogs = blog_list?.filter((item) =>
-    item?.title?.toLowerCase()?.includes(searchQuery.toLowerCase())
-  );
-
-  const staticPages = [
-    { page: "Home", href: "/" },
-    { page: "About Us", href: "/about" },
-    { page: "Contact Us", href: "/contact" },
-  ];
-
-  const renderActiveStyle = () => {
-    const props = {
-      logo,
-      category,
-      staticPages,
-      isActive,
-      imagePath,
-      openSearch,
-      searchQuery,
-      searchContainerRef,
-      handleSearchChange,
-      handleSearchToggle,
-      toggleSidebar,
-      filteredBlogs,
-      categories,
-    };
-
-    switch (nav_type?.active) {
-      case "style_1":
-        return <Style1 {...props} />;
-      case "style_2":
-        return <Style2 {...props} />;
-      case "style_3":
-        return <Style3 {...props} />;
-      case "style_4":
-        return <Style4 {...props} />;
-      case "style_5":
-        return <Style5 {...props} />;
-      case "style_6":
-        return <Style6 {...props} />;
-      case "style_7":
-        return <Style7 {...props} />;
-      case "style_8":
-        return <Style8 {...props} />;
-      case "style_9":
-        return <Style9 {...props} />;
-      default:
-        return null;
-    }
-  };
+  const closeSidebar = () => setSidebar(false);
 
   return (
     <>
-      {renderActiveStyle()}
-      <div
-        ref={addFromRef}
-        className={`h-screen w-7/12 transition-all overflow-y-scroll z-50 fixed right-0 top-0 px-4 bg-white dark:bg-gray-800 capitalize ${
-          sidebar && "shadow-xl"
-        }`}
-        style={{ transform: sidebar ? "translateX(0)" : "translateX(100%)" }}
-      >
-        <div className="flex items-center justify-end gap-3 h-[52px]">
-          <Search
-            className="w-5 md:w-4 text-black cursor-pointer"
-            onClick={() => {
-              toggleSidebar();
-              handleSearchToggle();
-            }}
-          />
-          <Menu onClick={toggleSidebar} className="w-6 h-6 md:hidden ml-1" />
-        </div>
-        <div className="flex flex-col mt-5">
-          <Link
-            title="Home"
-            href="/"
-            className={cn(
-              "font-semibold text-gray-500 capitalize border-b hover:text-black hover:border-black transition-all px-2 py-3",
-              isActive("/") && "border-black text-black"
-            )}
-          >
-            Home
-          </Link>
-          {categories?.map((item, index) => (
-            <Link
-              key={index}
-              title={item}
-              href={`/${sanitizeUrl(item?.title)}`}
-              className={cn(
-                "font-semibold text-gray-500 capitalize hover:text-black transition-all py-3 px-2 border-b hover:border-black",
-                (category === item?.title || isActive(`/${item?.title}`)) &&
-                  "border-black text-black"
-              )}
+      <FullContainer className="sticky top-0 z-20 bg-theme text-white shadow py-2 lg:py-3">
+        <Container>
+          <div className="flex justify-between items-center w-full lg:grid lg:grid-cols-nav">
+            {/* Logo and Menu Toggle (for mobile) */}
+            <div className="flex items-center justify-between w-full lg:w-auto">
+              <Logo logo={logo} imagePath={imagePath} />
+              <div className="flex gap-4 lg:hidden">
+                <Search
+                  className="w-8 h-8 text-white cursor-pointer bg-button rounded-full p-2"
+                  onClick={handleSearchToggle}
+                />
+                <Menu
+                  onClick={() => setSidebar(true)}
+                  className="cursor-pointer w-8 h-8 bg-button rounded-full p-2"
+                />
+              </div>
+            </div>
+
+            {/* Category Links (for larger screens) */}
+            <div
+              className="hidden lg:flex items-center justify-end gap-4 text-white relative"
+              ref={searchContainerRef}
             >
-              {item.title}
-            </Link>
-          ))}
-          <Link
-            title="About"
-            href="/about"
-            className={cn(
-              "font-semibold text-gray-500 capitalize border-b hover:text-black hover:border-black transition-all px-2 py-3",
-              isActive("/about") && "border-black text-black"
-            )}
-          >
-            About
-          </Link>
-          <Link
-            title="Contact"
-            href="/contact"
-            className={cn(
-              "font-semibold text-gray-500 capitalize border-b hover:text-black hover:border-black transition-all px-2 py-3",
-              isActive("/contact") && "border-black text-black"
-            )}
-          >
-            Contact
-          </Link>
-          <Link
-            title="Privacy Policy"
-            href="/privacy-policy"
-            className={cn(
-              "font-semibold text-gray-500 capitalize border-b hover:text-black hover:border-black transition-all px-2 py-3",
-              isActive("/privacy-policy") && "border-black text-black"
-            )}
-          >
-            Privacy Policy
-          </Link>
-          <Link
-            title="Terms & Conditions"
-            href="/terms-and-conditions"
-            className={cn(
-              "font-semibold text-gray-500 capitalize border-b hover:text-black hover:border-black transition-all px-2 py-3",
-              isActive("/terms-and-conditions") && "border-black text-black"
-            )}
-          >
-            Terms & Conditions
-          </Link>
+              {categories?.map((item, index) => (
+                <Link
+                  key={index}
+                  title={item?.title}
+                  href={`/${sanitizeUrl(item?.title)}`}
+                  className={cn(
+                    "font-semibold text-white capitalize border-transparent transition-all py-4 px-2 border-b-2 w-fit"
+                  )}
+                >
+                  {item.title}
+                </Link>
+              ))}
+            </div>
+
+            {/* Search and Menu Icon (for larger screens) */}
+            <div className="hidden lg:flex items-center justify-end gap-2">
+              <Search
+                className="w-10 h-10 md:w-11 md:h-11 text-white cursor-pointer bg-button rounded-full p-2"
+                onClick={handleSearchToggle}
+              />
+              <Menu
+                onClick={() => setSidebar(true)}
+                className="cursor-pointer w-10 h-10 md:w-11 md:h-11 bg-button rounded-full p-2"
+              />
+            </div>
+          </div>
+        </Container>
+      </FullContainer>
+
+      {/* Search Input (on mobile) */}
+      {openSearch && (
+        <div className="fixed lg:absolute top-16 lg:right-0 w-full lg:w-fit flex flex-col items-start justify-center lg:justify-end left-0 px-4 lg:px-0">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={handleSearchChange}
+            className="lg:text-xl border border-gray-300 inputField rounded-md outline-none bg-white shadow-xl p-2 px-3 mx-auto transition-opacity duration-300 ease-in-out opacity-100 w-5/6 lg:w-[650px] focus:ring-2 focus:ring-yellow-500"
+            placeholder="Search..."
+            autoFocus
+          />
+          {searchQuery && (
+            <div className="lg:absolute top-full p-1 lg:p-3 right-0 bg-white shadow-2xl rounded-md mt-1 z-10 mx-auto w-5/6 lg:w-[650px]">
+              {filteredBlogs?.length > 0 ? (
+                filteredBlogs.map((item, index) => (
+                  <Link
+                    key={index}
+                    title={item.title}
+                    href={`/${sanitizeUrl(item.article_category)}/${sanitizeUrl(
+                      item?.title
+                    )}`}
+                  >
+                    <div className="p-2 hover:bg-gray-200 border-b text-gray-600">
+                      {item.title}
+                    </div>
+                  </Link>
+                ))
+              ) : (
+                <div className="p-2 text-gray-600">No articles found.</div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Sidebar */}
+      <div
+        className={`sidebar fixed top-0 right-0 h-screen flex flex-col justify-between bg-theme shadow-lg text-white z-50 overflow-x-hidden p-10 lg:p-6 ${
+          sidebar ? "open" : "-mr-96"
+        }`}
+      >
+        <div>
+          <div className="flex items-center justify-between">
+            <Logo logo={logo} imagePath={imagePath} />
+            <X
+              className="w-8 text-white cursor-pointer"
+              onClick={closeSidebar}
+            />
+          </div>
+
+          <div className="flex lg:hidden items-center gap-3 font-normal mt-8 w-full">
+            <Search className="w-7" />
+            <input
+              className="bg-transparent border-b border-white/50 pb-1 outline-none flex-1"
+              placeholder="Search..."
+            />
+          </div>
+
+          <div className="flex flex-col pt-10">
+            {categories?.map((item, index) => (
+              <Link
+                key={index}
+                title={item?.title}
+                href={`/${sanitizeUrl(item?.title)}`}
+                className={cn(
+                  "font-semibold text-white capitalize border-transparent transition-all py-2 px-2 border-b border-gray-600"
+                )}
+                onClick={closeSidebar}
+              >
+                {item.title}
+              </Link>
+            ))}
+          </div>
+        </div>
+        <div>
+          <p className="text-normal">© 2024 Katen. All Rights Reserved.</p>
         </div>
       </div>
+
+      {/* Sidebar Overlay */}
+      {sidebar && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 "
+          onClick={closeSidebar}
+        ></div>
+      )}
+
+      <style jsx>{`
+        .sidebar {
+          width: 0;
+          transition: width 0.3s ease;
+        }
+
+        .sidebar.open {
+          width: 300px;
+        }
+
+        @media only screen and (max-width: 600px) {
+          .sidebar.open {
+            width: 100%;
+          }
+        }
+      `}</style>
     </>
   );
-};
-
-export default Navbar;
+}
