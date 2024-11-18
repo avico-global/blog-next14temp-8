@@ -18,8 +18,11 @@ module.exports = {
     },
     extend: {
       colors: {
-        theme:"rgb(20,32,48)",
-        button:" rgb(254,95,117)",
+        footer:"rgb(22,22,22)",
+        mustRead:"rgb(34,34,34)",
+        primary1:"rgb(220,20,63)",
+        theme:"#111111",
+        button:" rgb(214,214,214)",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -72,6 +75,11 @@ module.exports = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      backgroundImage:{
+         
+        contact: "url(/contact.webp)",
+
       },
       gridTemplateColumns: {
         home: "0.9fr 0.4fr",

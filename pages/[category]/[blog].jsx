@@ -5,7 +5,6 @@ import Container from "@/components/common/Container";
 import Footer from "@/components/containers/Footer";
 import { useRouter } from "next/router";
 import MarkdownIt from "markdown-it";
-import LatestBlogs from "@/components/containers/LatestBlogs";
 import Head from "next/head";
 import {
   callBackendApi,
@@ -17,10 +16,7 @@ import {
 import JsonLd from "@/components/json/JsonLd";
 import GoogleTagManager from "@/lib/GoogleTagManager";
 import useBreadcrumbs from "@/utils/useBreadcrumbs";
-import Breadcrumbs from "@/components/common/Breadcrumbs";
 import SocialShare from "@/components/containers/SocialShare";
-import MostPopular from "@/components/containers/MostPopular";
-import MustRead from "@/components/containers/MustRead";
 import Navbar from "@/components/containers/Navbar";
 import BlogBanner from "@/components/containers/BlogBanner";
 
@@ -66,8 +62,6 @@ export default function Blog({
     }
   }, [category, router, blog]);
 
-  const page = layout?.find((page) => page.page?.toLowerCase() === "blog page");
-
   return (
     <div>
       <Head>
@@ -105,118 +99,62 @@ export default function Blog({
         />
       </Head>
 
-      {page?.enable
-        ? page?.sections?.map((item, index) => {
-            if (!item.enable) return null;
-            switch (item.section?.toLowerCase()) {
-              case "navbar":
-                return (
-                  <Navbar
-                    key={index}
-                    blog_list={blog_list}
-                    category={category}
-                    categories={categories}
-                    logo={logo}
-                    nav_type={nav_type}
-                    imagePath={imagePath}
-                    contact_details={contact_details}
-                  />
-                );
-              case "breadcrumbs":
-                return (
-                  <FullContainer key={index}>
-                    <Container>
-                      <Breadcrumbs
-                        breadcrumbs={breadcrumbs}
-                        className="pt-7 pb-5"
-                      />
-                    </Container>
-                  </FullContainer>
-                );
+      <Navbar
+        blog_list={blog_list}
+        category={category}
+        categories={categories}
+        logo={logo}
+        nav_type={nav_type}
+        imagePath={imagePath}
+        contact_details={contact_details}
+      />
 
-              case "blog text":
-                return (
-                  <FullContainer key={index}>
-                    <Container>
-                      <div className="grid  lg:grid-cols-home gap-14 w-full ">
-                        <div>
-                          <BlogBanner
-                            key={index}
-                            myblog={myblog}
-                            imagePath={imagePath}
-                            blog_type={blog_type}
-                          />
-                          <article className="prose lg:prose-xl max-w-full text-white">
-                            <div
-                              dangerouslySetInnerHTML={{ __html: content }}
-                            />
-                          </article>
-                          <div className="mt-12">
-                            <h3 className="text-lg font-semibold">
-                              Share this article:
-                            </h3>
-                            <SocialShare
-                              url={`http://${domain}${myblog?.article_category}/${myblog?.key}`}
-                              title={myblog?.value.title}
-                            />
-                          </div>
-                        </div>
-                        <Rightbar
-                          about_me={about_me}
-                          imagePath={imagePath}
-                          categories={categories}
-                          contact_details={contact_details}
-                          tag_list={tag_list}
-                          widgets={page?.widgets}
-                          blog_list={blog_list}
-                          category={category}
-                        />
-                      </div>
-                    </Container>
-                  </FullContainer>
-                );
-              case "latest posts":
-                return (
-                  <FullContainer className="mt-14" key={index}>
-                    <Container>
-                      <LatestBlogs articles={blog_list} imagePath={imagePath} />
-                    </Container>
-                  </FullContainer>
-                );
-              case "popular posts":
-                return (
-                  <FullContainer key={index}>
-                    <Container>
-                      <MostPopular articles={blog_list} imagePath={imagePath} />
-                    </Container>
-                  </FullContainer>
-                );
-              case "must read":
-                return (
-                  <FullContainer key={index}>
-                    <Container>
-                      <MustRead articles={blog_list} imagePath={imagePath} />
-                    </Container>
-                  </FullContainer>
-                );
-              case "footer":
-                return (
-                  <Footer
-                    key={index}
-                    logo={logo}
-                    about_me={about_me}
-                    blog_list={blog_list}
-                    imagePath={imagePath}
-                    copyright={copyright}
-                    categories={categories}
-                    contact_details={contact_details}
-                  />
-                );
-              default:
-                return null;
-            }
-          })
-        : "Page Disabled, under maintenance"}
+      <BlogBanner
+        myblog={myblog}
+        imagePath={imagePath}
+        blog_type={blog_type}
+      />
+
+      <FullContainer>
+        <Container>
+          <div className="grid  lg:grid-cols-home gap-14 w-full ">
+            <div>
+              <article className="prose lg:prose-xl max-w-full text-white">
+                <div dangerouslySetInnerHTML={{ __html: content }} />
+              </article>
+              <div className="mt-12">
+                <h3 className="text-lg font-semibold text-white">
+                  Share this article:
+                </h3>
+                <SocialShare
+                  url={`http://${domain}${myblog?.article_category}/${myblog?.key}`}
+                  title={myblog?.value.title}
+                />
+              </div>
+            </div>
+            <Rightbar
+              about_me={about_me}
+              imagePath={imagePath}
+              categories={categories}
+              contact_details={contact_details}
+              tag_list={tag_list}
+              widgets={layout?.widgets}
+              blog_list={blog_list}
+              category={category}
+            />
+          </div>
+        </Container>
+      </FullContainer>
+
+      <Footer
+        logo={logo}
+        about_me={about_me}
+        blog_list={blog_list}
+        imagePath={imagePath}
+        copyright={copyright}
+        categories={categories}
+        contact_details={contact_details}
+      />
 
       <JsonLd
         data={{
@@ -304,7 +242,7 @@ export async function getServerSideProps({ req, query }) {
       tag_list: tag_list?.data[0]?.value || null,
       categories: categories?.data[0]?.value || null,
       about_me: about_me.data[0] || null,
-      contact_details: contact_details.data[0].value,
+      contact_details: contact_details.data[0]?.value || null,
       favicon: favicon?.data[0]?.file_name || null,
       nav_type: nav_type?.data[0]?.value || {},
       blog_type: blog_type?.data[0]?.value || {},

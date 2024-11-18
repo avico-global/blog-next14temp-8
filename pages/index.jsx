@@ -28,6 +28,7 @@ import Link from "next/link";
 import Image from "next/image";
 import Banner from "@/components/containers/Banner";
 import LatestBlogs from "@/components/containers/LatestBlogs";
+import AllArticles from "@/components/containers/AllArticles";
 
 export default function Home({
   logo,
@@ -61,8 +62,6 @@ export default function Home({
       router.replace("/about");
     }
   }, [category, router]);
-
-  const page = layout?.find((page) => page.page === "home");
 
   return (
     <div>
@@ -101,172 +100,62 @@ export default function Home({
         />
       </Head>
 
-      {page?.enable
-        ? page?.sections?.map((item, index) => {
-            if (!item.enable) return null;
+      {/* Navbar */}
+      <Navbar
+        logo={logo}
+        imagePath={imagePath}
+        blog_list={blog_list}
+        categories={categories}
+        nav_type={nav_type}
+      />
 
-            switch (item.section?.toLowerCase()) {
-              case "navbar":
-                return (
-                  <Navbar
-                    key={index}
-                    logo={logo}
-                    imagePath={imagePath}
-                    blog_list={blog_list}
-                    categories={categories}
-                    nav_type={nav_type}
-                  />
-                );
+      {/* Main Content */}
+      <FullContainer>
+        <Container>
+          <div className="flex flex-col gap-12">
+            {/* Banner */}
+            <Banner
+              data={banner.value}
+              image={`${imagePath}/${banner?.file_name}`}
+              blog_list={blog_list}
+            />
 
-              case "articles":
-                return (
-                  <FullContainer key={index}>
-                    <Container>
-                      <div className="grid grid-cols-1  md:grid-cols-home1 lg:grid-cols-home gap-12 w-full mt-14">
-                        <div className="flex flex-col gap-12">
-                          <Banner
-                            key={index}
-                            data={banner.value}
-                            image={`${imagePath}/${banner?.file_name}`}
-                            blog_list={blog_list}
-                          />
-                          {page?.sections?.map((item, index) => {
-                            if (!item.enable) return null;
+            {/* Latest Blogs */}
+            <LatestBlogs articles={blog_list} imagePath={imagePath} />
 
-                            switch (item.section?.toLowerCase()) {
-                              case "latest posts":
-                                return (
-                                  <LatestBlogs
-                                    key={index}
-                                    articles={blog_list}
-                                    imagePath={imagePath}
-                                  />
-                                );
-                              case "most popular":
-                                return (
-                                  <MostPopular
-                                    key={index}
-                                    articles={blog_list}
-                                    imagePath={imagePath}
-                                  />
-                                );
-                              case "must read":
-                                return (
-                                  <MustRead
-                                    key={index}
-                                    articles={blog_list}
-                                    imagePath={imagePath}
-                                  />
-                                );
+            {/* Most Popular & Must Read */}
+            <MostPopular articles={blog_list} imagePath={imagePath} />
+            <MustRead articles={blog_list} imagePath={imagePath} />
 
-                                return (
-                                  <div key={index}>
-                                    {categories?.map((category, index) => (
-                                      <div key={index} className="w-full mb-12">
-                                        <SectionHeading
-                                          title={category?.title}
-                                          className="mb-7"
-                                        />
-                                        <div className="grid grid-cols-3 gap-8">
-                                          {blog_list?.map(
-                                            (item, index) =>
-                                              item.article_category ===
-                                                category?.title && (
-                                                <Link
-                                                  title={item.imageTitle}
-                                                  href={`/${sanitizeUrl(
-                                                    item.article_category
-                                                  )}/${sanitizeUrl(
-                                                    item?.title
-                                                  )}`}
-                                                  key={index}
-                                                  className="flex flex-col gap-2 text-lg"
-                                                >
-                                                  <div className="overflow-hidden relative h-52 w-full bg-gray-200 rounded-md ">
-                                                    <Image
-                                                      title={
-                                                        item.imageTitle ||
-                                                        item.title ||
-                                                        "Article Thumbnail"
-                                                      }
-                                                      alt={
-                                                        item.altImage ||
-                                                        item.tagline ||
-                                                        "No Thumbnail Found"
-                                                      }
-                                                      src={`${imagePath}/${item.image}`}
-                                                      fill={true}
-                                                      loading="lazy"
-                                                      className="w-full h-full object-cover absolute top-0 scale-125"
-                                                    />
-                                                  </div>
-                                                  <div>
-                                                    <p className="font-bold text-center text-inherit leading-tight">
-                                                      {item.title}
-                                                    </p>
-                                                    <div className="flex items-center justify-center gap-2 mt-1">
-                                                      <p className="text-xs">
-                                                        <span className="text-gray-400 text-xs">
-                                                          By
-                                                        </span>
-                                                        : {item.author}
-                                                      </p>
-                                                      <span className="text-gray-400">
-                                                        --
-                                                      </span>
-                                                      <p className="text-xs text-gray-400">
-                                                        {dayjs(
-                                                          item?.published_at
-                                                        )?.format(
-                                                          "MMM D, YYYY"
-                                                        )}
-                                                      </p>
-                                                    </div>
-                                                  </div>
-                                                </Link>
-                                              )
-                                          )}
-                                        </div>
-                                      </div>
-                                    ))}
-                                  </div>
-                                );
+            {/* All Articles & Rightbar */}
+            <div className="grid grid-cols-1 md:grid-cols-home1 lg:grid-cols-home gap-12 w-full mt-14">
+              <AllArticles articles={blog_list} imagePath={imagePath} />
+              <Rightbar
+                imagePath={imagePath}
+                about_me={about_me}
+                widgets={layout?.widgets}
+                tag_list={tag_list}
+                categories={categories}
+                blog_list={blog_list}
+              />
+            </div>
 
-                              default:
-                                return null;
-                            }
-                          })}
-                        </div>
-                        <Rightbar
-                          imagePath={imagePath}
-                          about_me={about_me}
-                          widgets={page?.widgets}
-                          tag_list={tag_list}
-                          categories={categories}
-                          blog_list={blog_list}
-                        />
-                      </div>
-                    </Container>
-                  </FullContainer>
-                );
+            {/* Categories Section */}
 
-              case "footer":
-                return (
-                  <Footer
-                    key={index}
-                    logo={logo}
-                    footer_text=""
-                    categories={categories}
-                    imagePath={imagePath}
-                    blog_list={blog_list}
-                  />
-                );
-              default:
-                return null;
-            }
-          })
-        : "Page Disabled, under maintenance"}
+          </div>
+        </Container>
+      </FullContainer>
 
+      {/* Footer */}
+      <Footer
+        logo={logo}
+        footer_text=""
+        categories={categories}
+        imagePath={imagePath}
+        blog_list={blog_list}
+      />
+
+      {/* JSON-LD */}
       <JsonLd
         data={{
           "@context": "https://www.schema.org",
@@ -351,8 +240,8 @@ export default function Home({
                     "@id": `http://${domain}/${blog?.article_category
                       ?.replaceAll(" ", "-")
                       ?.toLowerCase()}/${blog.title
-                      ?.replaceAll(" ", "-")
-                      ?.toLowerCase()}`,
+                        ?.replaceAll(" ", "-")
+                        ?.toLowerCase()}`,
                   },
                 },
               })),
@@ -400,10 +289,10 @@ export async function getServerSideProps({ req }) {
       nav_type: nav_type?.data[0]?.value || {},
       tag_list: tag_list?.data[0]?.value || null,
       blog_list: blog_list?.data[0]?.value || [],
-      copyright: copyright?.data[0].value || null,
+      copyright: copyright?.data[0]?.value || null,
       favicon: favicon?.data[0]?.file_name || null,
       categories: categories?.data[0]?.value || null,
-      contact_details: contact_details?.data[0]?.value,
+      contact_details: contact_details?.data[0]?.value || null,
     },
   };
 }

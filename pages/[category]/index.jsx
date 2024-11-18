@@ -47,8 +47,6 @@ export default function Category({
     return item.article_category.toLowerCase() === searchContent;
   });
 
-  const page = layout?.find((page) => page.page === "category");
-
   return (
     <div className="flex flex-col min-h-screen justify-between">
       <Head>
@@ -98,143 +96,103 @@ export default function Category({
         />
       </Head>
 
-      {page?.enable
-        ? page?.sections?.map((item, index) => {
-            if (!item.enable) return null;
-            switch (item.section?.toLowerCase()) {
-              case "navbar":
-                return (
-                  <Navbar
-                    key={index}
-                    category={category}
-                    blog_list={blog_list}
-                    categories={categories}
-                    logo={logo}
-                    nav_type={nav_type}
-                    imagePath={imagePath}
-                    contact_details={contact_details}
-                  />
-                );
+      <Navbar
+        category={category}
+        blog_list={blog_list}
+        categories={categories}
+        logo={logo}
+        nav_type={nav_type}
+        imagePath={imagePath}
+        contact_details={contact_details}
+      />
 
-              case "breadcrumbs":
-                return (
-                  <FullContainer
-                    key={index}
-                    className="w-full py-8 bg-gray-800"
+      <FullContainer className="py-16">
+        <Container>
+          <div className="grid grid-cols-1 md:grid-cols-home gap-12 w-full ">
+            <div className="w-full grid grid-cols-1 gap-4 rounded-xl pt-6 ">
+              {filteredBlogList.map((item, index) => (
+                <div key={index} className="gap-4 pb-5 ">
+                  <Link
+                    title={item?.title || "Article Link"}
+                    href={`/${sanitizeUrl(
+                      item.article_category
+                    )}/${sanitizeUrl(item?.title)}`}
+                    className="flex-shrink-0 w-40 lg:w-60"
                   >
-                    <h1 className="text-2xl font-semibold capitalize px-4 py-1 text-white">
-                      {category?.replace("-", " ")}
-                    </h1>
-                    <div className="w-24 mt-2 h-1 bg-gray-500 "></div>
-                    <Breadcrumbs
-                      breadcrumbs={breadcrumbs}
-                      className="mt-1 justify-center"
-                    />
-                  </FullContainer>
-                );
+                    <div className="overflow-hidden relative h-40 lg:h-96 rounded-sm w-full bg-black ">
+                      <Image
+                        title={
+                          item.imageTitle ||
+                          item.title ||
+                          "Article Thumbnail"
+                        }
+                        alt={
+                          item.altImage ||
+                          item.tagline ||
+                          "No Thumbnail Found"
+                        }
+                        src={
+                          item.image
+                            ? `${imagePath}/${item.image}`
+                            : "/no-image.png"
+                        }
+                        fill={true}
+                        loading="lazy"
+                        className="w-full h-full object-cover absolute top-0 hover:scale-125 transition-all"
+                      />
+                    </div>
+                  </Link>
+                  <div className="flex flex-col justify-center space-y-6 pt-6 ">
+                    <Link
+                      title={item?.title || "Article Link"}
+                      href={`/${sanitizeUrl(
+                        item.article_category
+                      )}/${sanitizeUrl(item?.title)}`}
+                    >
+                      <h2 className="mt-2 lg:mt-0 font-bold text-2xl hover:text-primary1 text-inherit leading-tight hover:text-button transition-all text-white">
+                        {item.title}
+                      </h2>
+                    </Link>
+                    <div className="flex gap-2 mt-1 ">
+                      <p className="text-normal text-gray-500">written by</p>
+                      <p className="text-normal text-gray-300">{item.author}</p>
+                    </div>
+                    <p className="text-gray-400 mt-2">{item.tagline}</p>
+                    <Link
+                      title={item?.title || "Article Link"}
+                      href={`/${sanitizeUrl(
+                        item.article_category
+                      )}/${sanitizeUrl(item?.title)}`}
+                      className="text-sm font-bold bg-button hover:bg-gray-300 py-3 px-4 w-44"
+                    >
+                      CONTINUE READING
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <Rightbar
+              about_me={about_me}
+              tag_list={tag_list}
+              blog_list={blog_list}
+              imagePath={imagePath}
+              categories={categories}
+              contact_details={contact_details}
+              widgets={layout?.widgets}
+            />
+          </div>
+        </Container>
+      </FullContainer>
 
-              case "search result":
-                return (
-                  <FullContainer key={index} className="py-16">
-                    <Container>
-                      <div className="grid grid-cols-1 md:grid-cols-home gap-12 w-full ">
-                        <div className="w-full grid grid-cols-1 gap-4  border border-gray-500 p-10 rounded-xl ">
-                          {filteredBlogList.map((item, index) => (
-                            <div key={index} className="flex gap-4 border-b pb-5 border-gray-500">
-                              <Link
-                                title={item?.title || "Article Link"}
-                                href={`/${sanitizeUrl(
-                                  item.article_category
-                                )}/${sanitizeUrl(item?.title)}`}
-                                className="flex-shrink-0 w-40 lg:w-60 b"
-                              >
-                                <div className="overflow-hidden relative h-40 lg:h-60 rounded-lg w-full bg-black">
-                                  <Image
-                                    title={
-                                      item.imageTitle ||
-                                      item.title ||
-                                      "Article Thumbnail"
-                                    }
-                                    alt={
-                                      item.altImage ||
-                                      item.tagline ||
-                                      "No Thumbnail Found"
-                                    }
-                                    src={
-                                      item.image
-                                        ? `${imagePath}/${item.image}`
-                                        : "/no-image.png"
-                                    }
-                                    fill={true}
-                                    loading="lazy"
-                                    className="w-full h-full object-cover absolute top-0 hover:scale-125 transition-all"
-                                  />
-                                </div>
-                              </Link>
-                              <div className="flex flex-col justify-center space-y-6">
-                                <div className="flex gap-2 mt-1 ">
-                                  <p className="text-normal text-gray-300">
-                                    {item.author}
-                                  </p>
-                                  <span className="text-button font-extrabold ">
-                                    .
-                                  </span>
-                                  <p className="text-normal text-gray-300">
-                                    {dayjs(item?.published_at)?.format(
-                                      "MMM D, YYYY"
-                                    )}
-                                  </p>
-                                </div>
-                                <Link
-                                  title={item?.title || "Article Link"}
-                                  href={`/${sanitizeUrl(
-                                    item.article_category
-                                  )}/${sanitizeUrl(item?.title)}`}
-                                >
-                                  <h2 className="mt-2 lg:mt-0 font-bold text-lg text-inherit leading-tight hover:text-button  transition-all text-white">
-                                    {item.title}
-                                  </h2>
-                                </Link>
-
-                                <p className="text-gray-200 mt-2">
-                                  {item.tagline}
-                                </p>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                        <Rightbar
-                          about_me={about_me}
-                          tag_list={tag_list}
-                          blog_list={blog_list}
-                          imagePath={imagePath}
-                          categories={categories}
-                          contact_details={contact_details}
-                          widgets={page?.widgets}
-                        />
-                      </div>
-                    </Container>
-                  </FullContainer>
-                );
-
-              case "footer":
-                return (
-                  <Footer
-                    key={index}
-                    blog_list={blog_list}
-                    categories={categories}
-                    logo={logo}
-                    imagePath={imagePath}
-                    about_me={about_me}
-                    contact_details={contact_details}
-                    copyright={copyright}
-                  />
-                );
-              default:
-                return null;
-            }
-          })
-        : "Page Disabled, under maintenance"}
+      <Footer
+        blog_list={blog_list}
+        categories={categories}
+        logo={logo}
+        imagePath={imagePath}
+        about_me={about_me}
+        contact_details={contact_details}
+        copyright={copyright}
+      />
 
       <JsonLd
         data={{
@@ -351,7 +309,7 @@ export async function getServerSideProps({ req, query }) {
       copyright: copyright?.data[0]?.value || null,
       domain: domain === "hellospace.us" ? req?.headers?.host : domain,
       about_me: about_me.data[0] || null,
-      contact_details: contact_details.data[0].value,
+      contact_details: contact_details.data[0]?.value || null,
       tag_list: tag_list?.data[0]?.value || null,
       nav_type: nav_type?.data[0]?.value || {},
     },

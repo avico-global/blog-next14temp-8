@@ -6,14 +6,18 @@ import FullContainer from "@/components/common/FullContainer";
 import AboutBanner from "@/components/containers/AboutBanner";
 import Footer from "@/components/containers/Footer";
 import Navbar from "@/components/containers/Navbar";
-import Rightbar from "@/components/containers/Rightbar";
-import { callBackendApi, getDomain, getImagePath } from "@/lib/myFun";
-
+import Breadcrumbs from "@/components/common/Breadcrumbs";
 import GoogleTagManager from "@/lib/GoogleTagManager";
 import JsonLd from "@/components/json/JsonLd";
-
 import useBreadcrumbs from "@/lib/useBreadcrumbs";
-import Breadcrumbs from "@/components/common/Breadcrumbs";
+import {
+  getDomain,
+  robotsTxt,
+  sanitizeUrl,
+  getImagePath,
+  callBackendApi,
+} from "@/lib/myFun";
+
 
 export default function About({
   logo,
@@ -32,8 +36,6 @@ export default function About({
   const markdownIt = new MarkdownIt();
   const content = markdownIt?.render(about_me?.value);
 
-  const page = layout?.find((page) => page.page === "about");
-
   const reversedLastFiveBlogs = useMemo(() => {
     const lastFiveBlogs = blog_list?.slice(-5);
     return lastFiveBlogs ? [...lastFiveBlogs].reverse() : [];
@@ -50,7 +52,6 @@ export default function About({
         <link rel="author" href={`https://www.${domain}`} />
         <link rel="publisher" href={`https://www.${domain}`} />
         <link rel="canonical" href={`https://www.${domain}/about`} />
-        {/* <meta name="robots" content="noindex" /> */}
         <meta name="theme-color" content="#008DE5" />
         <link rel="manifest" href="/manifest.json" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -79,75 +80,45 @@ export default function About({
         />
       </Head>
 
-      {page?.enable
-        ? page?.sections?.map((item, index) => {
-            if (!item.enable) return null;
-            switch (item.section?.toLowerCase()) {
-              case "navbar":
-                return (
-                  <Navbar
-                    key={index}
-                    logo={logo}
-                    nav_type={nav_type}
-                    imagePath={imagePath}
-                    blog_list={blog_list}
-                    categories={categories}
-                    contact_details={contact_details}
-                  />
-                );
-              case "banner":
-                return (
-                  <AboutBanner image={`${imagePath}/${about_me.file_name}`} />
-                );
-              case "breadcrumbs":
-                return (
-                  <FullContainer key={index}>
-                    <Container>
-                      <Breadcrumbs breadcrumbs={breadcrumbs} className="mt-7" />
-                    </Container>
-                  </FullContainer>
-                );
-              case "text":
-                return (
-                  <FullContainer>
-                    <Container className="pb-16 pt-8">
-                      <div className="grid grid-cols-about gap-16 w-full ">
-                        <div
-                          className="markdown-content text-white about_me prose max-w-full"
-                          dangerouslySetInnerHTML={{ __html: content }}
-                        />
-                        <Rightbar
-                          about_me={about_me}
-                          imagePath={imagePath}
-                          blog_list={blog_list}
-                          categories={categories}
-                          contact_details={contact_details}
-                          lastFiveBlogs={reversedLastFiveBlogs}
-                          widgets={page?.widgets}
-                        />
-                      </div>
-                    </Container>
-                  </FullContainer>
-                );
-              case "footer":
-                return (
-                  <Footer
-                    blog_list={blog_list}
-                    categories={categories}
-                    logo={logo}
-                    imagePath={imagePath}
-                    contact_details={contact_details}
-                    about_me={about_me}
-                    footer_type={footer_type}
-                  />
-                );
+      {/* Navbar Section */}
+      <Navbar
+        logo={logo}
+        nav_type={nav_type}
+        imagePath={imagePath}
+        blog_list={blog_list}
+        categories={categories}
+        contact_details={contact_details}
+      />
 
-              default:
-                return null;
-            }
-          })
-        : "Page Disabled, under maintenance"}
+      {/* Banner Section */}
+      <AboutBanner image={`${imagePath}/${about_me.file_name}`} />
 
+     
+
+      {/* Content Section */}
+      <FullContainer>
+        <Container className="pb-16 pt-8">
+          <div className="grid gap-16 w-full">
+            <div
+              className="markdown-content text-white about_me prose max-w-full"
+              dangerouslySetInnerHTML={{ __html: content }}
+            />
+          </div>
+        </Container>
+      </FullContainer>
+
+      {/* Footer Section */}
+      <Footer
+        blog_list={blog_list}
+        categories={categories}
+        logo={logo}
+        imagePath={imagePath}
+        contact_details={contact_details}
+        about_me={about_me}
+        footer_type={footer_type}
+      />
+
+      {/* JSON-LD Structured Data */}
       <JsonLd
         data={{
           "@context": "https://schema.org",
@@ -221,7 +192,7 @@ export async function getServerSideProps({ req, query }) {
       about_me: about_me.data[0] || null,
       blog_list: blog_list.data[0].value,
       categories: categories?.data[0]?.value || null,
-      contact_details: contact_details.data[0].value,
+      contact_details: contact_details.data[0]?.value || null,
       copyright: copyright?.data[0]?.value || null,
       nav_type: nav_type?.data[0]?.value || {},
       footer_type: footer_type?.data[0]?.value || {},

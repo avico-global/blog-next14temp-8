@@ -28,27 +28,51 @@ export default function Navbar({
 
   return (
     <>
-      <FullContainer className="sticky top-0 z-20 bg-theme text-white shadow py-2 lg:py-3">
-        <Container>
-          <div className="flex justify-between items-center w-full lg:grid lg:grid-cols-nav">
-            {/* Logo and Menu Toggle (for mobile) */}
-            <div className="flex items-center justify-between w-full lg:w-auto">
-              <Logo logo={logo} imagePath={imagePath} />
-              <div className="flex gap-4 lg:hidden">
+      <FullContainer className="sticky top-0 z-20 bg-theme text-white shadow py-2 lg:py-3 border-b border-gray-700">
+        <FullContainer className="lg:border-b lg:border-gray-700">
+          <Container>
+            <div className="flex justify-between items-center w-full lg:grid lg:grid-cols-nav py-3 lg:pb-6">
+              <div className="space-x-6   hidden lg:flex ">
+                <Link title="About" href="/about" className="text-sm text-white hover:text-primary1 " >
+                  About Us
+                </Link>
+                <Link title="Contact Us" href="/contact" className="text-sm text-white hover:text-primary1">
+                  Contact Us
+                </Link>
+              </div>
+
+              {/* Logo and Menu Toggle (for mobile) */}
+              <div className="flex items-center justify-between lg:justify-center w-full lg:w-auto">
+                <Logo logo={logo} imagePath={imagePath} />
+                <div className="flex gap-4 lg:hidden">
+                  <Search
+                    className="w-8 h-8 text-white cursor-pointer bg-mustRead rounded-full p-2"
+                    onClick={handleSearchToggle}
+                  />
+                  <Menu
+                    onClick={() => setSidebar(true)}
+                    className="cursor-pointer w-8 h-8 bg-mustRead rounded-full p-2"
+                  />
+                </div>
+              </div>
+
+              {/* Search Icon (for larger screens) */}
+              <div className="hidden lg:flex items-center justify-end gap-2">
                 <Search
-                  className="w-8 h-8 text-white cursor-pointer bg-button rounded-full p-2"
+                  className="w-10 h-10 md:w-11 md:h-11 text-white cursor-pointer bg-mustRead rounded-full p-2 hover:text-primary1 " 
                   onClick={handleSearchToggle}
                 />
-                <Menu
-                  onClick={() => setSidebar(true)}
-                  className="cursor-pointer w-8 h-8 bg-button rounded-full p-2"
-                />
+
               </div>
             </div>
+          </Container>
+        </FullContainer>
 
+        <Container>
+          <div className="flex justify-center items-center w-full">
             {/* Category Links (for larger screens) */}
             <div
-              className="hidden lg:flex items-center justify-end gap-4 text-white relative"
+              className="hidden lg:flex justify-center gap-4 text-white py-1  lg:border-b-2 lg:border-transparent w-full"
               ref={searchContainerRef}
             >
               {categories?.map((item, index) => (
@@ -57,28 +81,17 @@ export default function Navbar({
                   title={item?.title}
                   href={`/${sanitizeUrl(item?.title)}`}
                   className={cn(
-                    "font-semibold text-white capitalize border-transparent transition-all py-4 px-2 border-b-2 w-fit"
+                    "font-semibold text-white capitalize transition-all pt-3 px-2 lg:border-b-2 lg:border-transparent  hover:text-primary1"
                   )}
                 >
                   {item.title}
                 </Link>
               ))}
             </div>
-
-            {/* Search and Menu Icon (for larger screens) */}
-            <div className="hidden lg:flex items-center justify-end gap-2">
-              <Search
-                className="w-10 h-10 md:w-11 md:h-11 text-white cursor-pointer bg-button rounded-full p-2"
-                onClick={handleSearchToggle}
-              />
-              <Menu
-                onClick={() => setSidebar(true)}
-                className="cursor-pointer w-10 h-10 md:w-11 md:h-11 bg-button rounded-full p-2"
-              />
-            </div>
           </div>
         </Container>
       </FullContainer>
+
 
       {/* Search Input (on mobile) */}
       {openSearch && (
@@ -117,9 +130,8 @@ export default function Navbar({
 
       {/* Sidebar */}
       <div
-        className={`sidebar fixed top-0 right-0 h-screen flex flex-col justify-between bg-theme shadow-lg text-white z-50 overflow-x-hidden p-10 lg:p-6 ${
-          sidebar ? "open" : "-mr-96"
-        }`}
+        className={`sidebar fixed top-0 right-0 h-screen flex flex-col justify-between bg-theme shadow-lg text-white z-50 overflow-x-hidden p-10 lg:p-6 ${sidebar ? "open" : "-mr-96"
+          }`}
       >
         <div>
           <div className="flex items-center justify-between">
@@ -152,6 +164,15 @@ export default function Navbar({
                 {item.title}
               </Link>
             ))}
+
+          </div>
+          <div className="flex flex-col  ">
+            <Link title="About" href="/about" className=" font-semibold capitalize  text-white py-2 px-2 border-b border-gray-600">
+              About Us
+            </Link>
+            <Link title="Contact Us" href="/contact" className="font-semibold capitalize text-white py-2 px-2 border-b border-gray-600">
+              Contact Us
+            </Link>
           </div>
         </div>
         <div>

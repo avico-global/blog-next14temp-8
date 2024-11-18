@@ -5,7 +5,9 @@ import Container from "../common/Container";
 
 export default function AboutBanner({ image }) {
   return (
-    <FullContainer className="h-80 overflow-hidden p-10 bg-gray-800 text-white text-center">
+    <FullContainer className=" overflow-hidden p-10 text-white text-center">
+      <Container className="bg-contact  h-96" >
+
       <Image
         title="About"
         src={image}
@@ -20,6 +22,8 @@ export default function AboutBanner({ image }) {
           About Me
         </h1>
       </Container>
+      </Container>
+
     </FullContainer>
   );
 }
