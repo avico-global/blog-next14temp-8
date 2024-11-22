@@ -18,7 +18,6 @@ import {
   callBackendApi,
 } from "@/lib/myFun";
 
-
 export default function About({
   logo,
   about_me,
@@ -93,11 +92,11 @@ export default function About({
       {/* Banner Section */}
       <AboutBanner image={`${imagePath}/${about_me.file_name}`} />
 
-     
-
       {/* Content Section */}
       <FullContainer>
-        <Container className="pb-16 pt-8">
+        <Container className="pb-16 ">
+          <Breadcrumbs breadcrumbs={breadcrumbs} className="mt-2  mb-6 " />
+
           <div className="grid gap-16 w-full">
             <div
               className="markdown-content text-white about_me prose max-w-full"

@@ -108,40 +108,44 @@ export default function Category({
 
       <FullContainer className="py-16">
         <Container>
+          <Breadcrumbs breadcrumbs={breadcrumbs} className="mb-7" />
+
           <div className="grid grid-cols-1 md:grid-cols-home gap-12 w-full ">
             <div className="w-full grid grid-cols-1 gap-4 rounded-xl pt-6 ">
               {filteredBlogList.map((item, index) => (
-                <div key={index} className="gap-4 pb-5 ">
+                <div key={index} className="gap-4 pb-5  group ">
                   <Link
                     title={item?.title || "Article Link"}
-                    href={`/${sanitizeUrl(
-                      item.article_category
-                    )}/${sanitizeUrl(item?.title)}`}
-                    className="flex-shrink-0 w-40 lg:w-60"
+                    href={`/${sanitizeUrl(item.article_category)}/${sanitizeUrl(
+                      item?.title
+                    )}`}
                   >
-                    <div className="overflow-hidden relative h-40 lg:h-96 rounded-sm w-full bg-black ">
-                      <Image
-                        title={
-                          item.imageTitle ||
-                          item.title ||
-                          "Article Thumbnail"
-                        }
-                        alt={
-                          item.altImage ||
-                          item.tagline ||
-                          "No Thumbnail Found"
-                        }
-                        src={
-                          item.image
-                            ? `${imagePath}/${item.image}`
-                            : "/no-image.png"
-                        }
-                        fill={true}
-                        loading="lazy"
-                        className="w-full h-full object-cover absolute top-0 hover:scale-125 transition-all"
-                      />
+                    <div
+                      className="flex-shrink-0 w-full h-[400px]" // Increase height of parent container
+                    >
+                      <div className="overflow-hidden relative h-full rounded-sm w-full bg-black">
+                        <Image
+                          title={
+                            item.imageTitle || item.title || "Article Thumbnail"
+                          }
+                          alt={
+                            item.altImage ||
+                            item.tagline ||
+                            "No Thumbnail Found"
+                          }
+                          src={
+                            item.image
+                              ? `${imagePath}/${item.image}`
+                              : "/no-image.png"
+                          }
+                          fill={true}
+                          loading="lazy"
+                          className="w-full h-full object-cover absolute top-0 group-hover:scale-125 duration-1000 transition-all"
+                        />
+                      </div>
                     </div>
                   </Link>
+
                   <div className="flex flex-col justify-center space-y-6 pt-6 ">
                     <Link
                       title={item?.title || "Article Link"}
@@ -149,9 +153,14 @@ export default function Category({
                         item.article_category
                       )}/${sanitizeUrl(item?.title)}`}
                     >
-                      <h2 className="mt-2 lg:mt-0 font-bold text-2xl hover:text-primary1 text-inherit leading-tight hover:text-button transition-all text-white">
+                      <Link
+                        href={`/${sanitizeUrl(
+                          item.article_category
+                        )}/${sanitizeUrl(item?.title)}`}
+                        className="mt-2 lg:mt-0 font-bold text-2xl hover:text-primary1 text-inherit leading-tight underline-white transition-all text-white"
+                      >
                         {item.title}
-                      </h2>
+                      </Link>
                     </Link>
                     <div className="flex gap-2 mt-1 ">
                       <p className="text-normal text-gray-500">written by</p>
@@ -204,31 +213,31 @@ export default function Category({
                 "@type": "ListItem",
                 position: index + 1,
                 name: breadcrumb.label,
-                item: `http://${domain}${breadcrumb.url}`,
+                item: `https://${domain}${breadcrumb.url}`,
               })),
             },
             {
               "@type": "WebSite",
-              "@id": `http://${domain}/#website`,
-              url: `http://${domain}/`,
-              name: domain,
+              "@id": `https://${domain}/${category}`,
+              url: `https://${domain}/${category}`,
+              name: meta?.title,
               description: meta?.description,
               inLanguage: "en-US",
               publisher: {
                 "@type": "Organization",
-                "@id": `http://${domain}`,
+                "@id": `https://${domain}`,
               },
             },
             {
               "@type": "ItemList",
-              url: `http://${domain}`,
+              url: `https://${domain}/${category}`,
               name: "blog",
               itemListElement: blog_list?.map((blog, index) => ({
                 "@type": "ListItem",
                 position: index + 1,
                 item: {
                   "@type": "Article",
-                  url: `http://${domain}/${sanitizeUrl(
+                  url: `https://${domain}/${sanitizeUrl(
                     blog?.article_category.replaceAll(" ", "-")
                   )}/${sanitizeUrl(blog?.title)}`,
                   name: blog.title,

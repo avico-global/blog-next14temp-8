@@ -6,7 +6,7 @@ import MarkdownIt from "markdown-it";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/router";
 import { sanitizeUrl } from "@/lib/myFun";
- 
+
 const md = new MarkdownIt();
 
 export default function Rightbar({
@@ -45,6 +45,9 @@ export default function Rightbar({
             loading="eager"
             className="-z-10 object-cover min-w-full min-h-full"
           />
+          <div className="absolute inset-0  flex flex-col justify-center text-center p-4  font-bold text-white  text-xl bg-black bg-opacity-20">
+            <h3 className=" lg:text-3xl font-semibold ">About</h3>
+          </div>
         </div>
         <div
           className="mt-3 text-white text-center"
@@ -68,7 +71,7 @@ export default function Rightbar({
             className={cn(
               "text-white capitalize w-full flex items-center justify-between gap-2 hover:text-primary1 transition-all p-2 ",
               (category === item?.title || isActive(`/${item?.title}`)) &&
-              " text-primary1"
+                " text-primary1"
             )}
           >
             <div className="flex items-center gap-2">
@@ -115,137 +118,136 @@ export default function Rightbar({
     </div>
   );
 
- 
-   const renderLatestPosts = () => (
-     <div className="bg-theme rounded-lg overflow-hidden shadow-lg">
-       <div className="flex justify-center mb-4">
-         <button
-           onClick={() => setShowPopular(false)}
-           className={`py-2 px-16 ${!showPopular
-               ? "bg-mustRead text-primary1 font-bold border border-gray-700"
-               : "bg-gray-800 text-white border border-gray-600"
-             }`}
-         >
-           Latest
-         </button>
-         <button
-           onClick={() => setShowPopular(true)}
-           className={`py-2 px-16 ${showPopular
-               ? "bg-button text-white"
-               : "bg-theme text-white border border-gray-600"
-             }`}
-         >
-           Popular
-         </button>
-       </div>
-  
-       <div className="p-2">
-         {lastFiveBlogs
-           ?.reverse()
-           .slice(0, 4)
-           .map((item, index) => (
-             <Link
-               key={index}
-               title={item.article_category}
-               href={`/${encodeURI(
-                 sanitizeUrl(item.article_category)
-               )}/${encodeURI(sanitizeUrl(item.title))}`}
-               className="grid grid-cols-4 p-2 hover:shadow-md border border-transparent transition-all gap-4"
-             >
-               <div className="overflow-hidden relative col-span-2 h-24 bg-black  rounded-sm ">
-                 <Image
-                   title={item?.imageTitle || "Article Thumbnail"}
-                   src={
-                     item?.image ? `${imagePath}/${item.image}` : "/no-image.png"
-                   }
-                   fill={true}
-                   loading="lazy"
-                   alt="blog"
-                   className="w-full h-full object-cover hover:scale-105 transition-transform"
-                 />
-               </div>
-               <div className="col-span-2 flex flex-col justify-center">
-                 <p className="font-bold text-white leading-tight hover:text-primary1">
-                   {item?.title.slice(0, 50)}
-                 </p>
-                 <div className="flex items-center gap-2 mt-1 justify-between text-gray-400 text-xs">
-                   <p className="whitespace-nowrap">
-                     {item?.published_at}
-                   </p>
-                 </div>
-               </div>
-             </Link>
-           ))}
-       </div>
-     </div>
-   );
+  const renderLatestPosts = () => (
+    <div className=" rounded-lg overflow-hidden shadow-lg">
+      <div className="flex justify-center mb-4">
+        <button
+          onClick={() => setShowPopular(false)}
+          className={`py-2  px-12 lg:px-16 ${
+            !showPopular
+              ? "bg-mustRead text-primary1 font-bold border border-gray-700"
+              : "bg-gray-800 text-white border border-gray-600"
+          }`}
+        >
+          Latest
+        </button>
+        <button
+          onClick={() => setShowPopular(true)}
+          className={`py-2  px-12 lg:px-16  ${
+            showPopular
+              ? "bg-button text-white"
+              : "bg-theme text-white border border-gray-600"
+          }`}
+        >
+          Popular
+        </button>
+      </div>
+
+      <div className="p-2">
+        {lastFiveBlogs
+          ?.reverse()
+          .slice(0, 4)
+          .map((item, index) => (
+            <Link
+              href={`/${encodeURI(
+                sanitizeUrl(item.article_category)
+              )}/${encodeURI(sanitizeUrl(item.title))}`}
+              key={index}
+              title={item.article_category}
+              className="grid grid-cols-4 p-2 hover:shadow-md border border-transparent transition-all gap-4 group"
+            >
+              <div className="overflow-hidden relative col-span-2 h-24 bg-black  rounded-sm ">
+                <Image
+                  title={item?.imageTitle || "Article Thumbnail"}
+                  src={
+                    item?.image ? `${imagePath}/${item.image}` : "/no-image.png"
+                  }
+                  fill={true}
+                  loading="lazy"
+                  alt="blog"
+                  className="w-full h-full object-cover group-hover:scale-125 duration-1000 transition-transform"
+                />
+              </div>
+              <div className="col-span-2 flex flex-col justify-center">
+                <p className="font-bold text-white leading-tight hover:text-primary1 ">
+                  {item?.title.slice(0, 50)}
+                </p>
+                <div className="flex items-center gap-2 mt-1 justify-between text-gray-400 text-xs">
+                  <p className="whitespace-nowrap">{item?.published_at}</p>
+                </div>
+              </div>
+            </Link>
+          ))}
+      </div>
+    </div>
+  );
 
   const renderPopularPosts = () => (
-         <div className="bg-theme overflow-hidden shadow-lg">
-           <div className="flex justify-center mb-4">
-             <button
-               onClick={() => setShowPopular(false)}
-               className={`py-2 px-16 ${!showPopular
-                   ? "bg-black text-white"
-                   : "bg-black text-white border border-gray-600"
-                 }`}
-             >
-               Latest
-             </button>
-             <button
-               onClick={() => setShowPopular(true)}
-               className={`py-2 px-16 ${showPopular
-                   ? "bg-mustRead text-primary1 font-bold border border-gray-700"
-                   : "bg-gray-800 text-white border border-gray-600"
-                 }`}
-             >
-               Popular
-             </button>
-           </div>
-      
-           <div className="p-2">
-             {popularPosts.length > 0 ? (
-               popularPosts.slice(0, 4).map((item, index) => (
-                 <Link
-                   key={index}
-                   title={item.article_category}
-                   href={`/${encodeURI(
-                     sanitizeUrl(item.article_category)
-                   )}/${encodeURI(sanitizeUrl(item.title))}`}
-                   className="grid grid-cols-4 p-2 rounded-md hover:shadow-md border border-transparent transition-all gap-4"
-                 >
-                   <div className="overflow-hidden relative col-span-2 h-24 bg-black rounded-sm">
-                     <Image
-                       title={item?.imageTitle || "Article Thumbnail"}
-                       src={
-                         item?.image ? `${imagePath}/${item.image}` : "/no-image.png"
-                       }
-                       fill={true}
-                       loading="lazy"
-                       alt="blog"
-                       className="w-full h-full object-cover hover:scale-105 transition-transform"
-                     />
-                   </div>
-                   <div className="col-span-2 flex flex-col justify-center">
-                     <p className="font-bold text-white leading-tight hover:text-primary1">
-                       {item?.title.slice(0, 50)}
-                     </p>
-                     <div className="flex items-center gap-2 mt-1 justify-between text-gray-400 text-xs">
-                       <p className="whitespace-nowrap">
-                         {item?.published_at}
-                       </p>
-                     </div>
-                   </div>
-                 </Link>
-               ))
-             ) : (
-               <p className="text-center text-gray-500">
-                 No popular posts available.
-               </p>
-             )}
-           </div>
-         </div>
-       );
+    <div className=" overflow-hidden shadow-lg">
+      <div className="flex justify-center mb-4">
+        <button
+          onClick={() => setShowPopular(false)}
+          className={`py-2 px-12 lg:px-16 ${
+            !showPopular
+              ? "bg-black text-white"
+              : "bg-black text-white border border-gray-600"
+          }`}
+        >
+          Latest
+        </button>
+        <button
+          onClick={() => setShowPopular(true)}
+          className={`py-2  px-12 lg:px-16 ${
+            showPopular
+              ? "bg-mustRead text-primary1 font-bold border border-gray-700"
+              : "bg-gray-800 text-white border border-gray-600"
+          }`}
+        >
+          Popular
+        </button>
+      </div>
+
+      <div className="p-2">
+        {popularPosts.length > 0 ? (
+          popularPosts.slice(0, 4).map((item, index) => (
+            <Link
+              href={`/${encodeURI(
+                sanitizeUrl(item.article_category)
+              )}/${encodeURI(sanitizeUrl(item.title))}`}
+              key={index}
+              title={item.article_category}
+              className="grid grid-cols-4 p-2 rounded-md hover:shadow-md border border-transparent transition-all gap-4 group"
+            >
+              <div className="overflow-hidden relative col-span-2 h-24 bg-black rounded-sm">
+                <Image
+                  title={item?.imageTitle || "Article Thumbnail"}
+                  src={
+                    item?.image ? `${imagePath}/${item.image}` : "/no-image.png"
+                  }
+                  fill={true}
+                  loading="lazy"
+                  alt="blog"
+                  className="w-full h-full object-cover group-hover:scale-125 duration-1000 transition-transform"
+                />
+              </div>
+              <div className="col-span-2 flex flex-col justify-center">
+                <p className="font-bold text-white leading-tight hover:text-primary1 ">
+                  {item?.title.slice(0, 50)}
+                </p>
+                <div className="flex items-center gap-2 mt-1 justify-between text-gray-400 text-xs">
+                  <p className="whitespace-nowrap">{item?.published_at}</p>
+                </div>
+              </div>
+            </Link>
+          ))
+        ) : (
+          <p className="text-center text-gray-500">
+            No popular posts available.
+          </p>
+        )}
+      </div>
+    </div>
+  );
 
   return (
     <div className="h-fit sticky top-0 flex flex-col gap-14 pt-6 ">

@@ -64,6 +64,10 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
   }
+
+  .prose * {
+    color: inherit !important;
+  }
 }
 
 @layer base {
@@ -78,4 +82,16 @@
 .about_me h1 {
   font-size: 50px;
   margin-bottom: 0;
+}
+
+.underline-white {
+  text-decoration: none;
+  background: linear-gradient(currentColor, currentColor) bottom / 0 0.1em
+    no-repeat;
+  transition: 1s background-size;
+}
+
+.group:hover .underline-white {
+  background-size: 100% 0.1em;
+  background-position: left bottom;
 }

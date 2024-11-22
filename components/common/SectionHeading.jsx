@@ -3,7 +3,7 @@ const SectionHeading = ({ title, tagline, className }) => (
   <>
   <div
     className={cn(
-      "w-full text-left flex justify-center items-center gap-2  mb-4 py-2 px-3 border-t border-gray-700 ",
+      "w-full text-left flex justify-center items-center gap-2  mt-6 mb-4 py-2 px-3 border-t border-gray-700 ",
       className
     )}
   >

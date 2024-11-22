@@ -2,30 +2,50 @@ import FullContainer from "@/components/common/FullContainer";
 import { cn } from "@/lib/utils";
 import { Menu, Search, X } from "lucide-react";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Logo from "./Logo";
 import { sanitizeUrl } from "@/lib/myFun";
 import Container from "@/components/common/Container";
 
 export default function Navbar({
-  staticPages,
-  filteredBlogs,
   logo,
   categories,
-  isActive,
   searchContainerRef,
   imagePath,
   handleSearchToggle,
-  handleSearchChange,
-  toggleSidebar,
   openSearch,
-  category,
-  searchQuery,
+  blog_list,
 }) {
   const [sidebar, setSidebar] = useState(false);
+  const searchInputRef = useRef(null);
+  const [filteredBlogs, setFilteredBlogs] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const closeSidebar = () => setSidebar(false);
+  // Debounce search query
+  const debounceSearch = useCallback(() => {
+    if (searchQuery) {
+      const filtered = blog_list.filter((blog) =>
+        blog.title.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredBlogs(filtered);
+    } else {
+      setFilteredBlogs([]);
+    }
+  }, [searchQuery, blog_list]);
 
+  useEffect(() => {
+    const timeoutId = setTimeout(debounceSearch, 300);
+    return () => clearTimeout(timeoutId);
+  }, [searchQuery, debounceSearch]);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen((prevState) => !prevState);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
   return (
     <>
       <FullContainer className="sticky top-0 z-20 bg-theme text-white shadow py-2 lg:py-3 border-b border-gray-700">
@@ -33,10 +53,18 @@ export default function Navbar({
           <Container>
             <div className="flex justify-between items-center w-full lg:grid lg:grid-cols-nav py-3 lg:pb-6">
               <div className="space-x-6   hidden lg:flex ">
-                <Link title="About" href="/about" className="text-sm text-white hover:text-primary1 " >
+                <Link
+                  title="About"
+                  href="/about"
+                  className="text-sm text-white hover:text-primary1 "
+                >
                   About Us
                 </Link>
-                <Link title="Contact Us" href="/contact" className="text-sm text-white hover:text-primary1">
+                <Link
+                  title="Contact Us"
+                  href="/contact"
+                  className="text-sm text-white hover:text-primary1"
+                >
                   Contact Us
                 </Link>
               </div>
@@ -45,10 +73,6 @@ export default function Navbar({
               <div className="flex items-center justify-between lg:justify-center w-full lg:w-auto">
                 <Logo logo={logo} imagePath={imagePath} />
                 <div className="flex gap-4 lg:hidden">
-                  <Search
-                    className="w-8 h-8 text-white cursor-pointer bg-mustRead rounded-full p-2"
-                    onClick={handleSearchToggle}
-                  />
                   <Menu
                     onClick={() => setSidebar(true)}
                     className="cursor-pointer w-8 h-8 bg-mustRead rounded-full p-2"
@@ -58,11 +82,44 @@ export default function Navbar({
 
               {/* Search Icon (for larger screens) */}
               <div className="hidden lg:flex items-center justify-end gap-2">
-                <Search
-                  className="w-10 h-10 md:w-11 md:h-11 text-white cursor-pointer bg-mustRead rounded-full p-2 hover:text-primary1 " 
-                  onClick={handleSearchToggle}
-                />
+                {/* Search Section */}
+                <div className="flex items-center justify-end gap-3 relative">
+                  <div className="hidden lg:flex items-center border border-white/30 rounded-md px-4 gap-1">
+                    <Search className="  w-5 h-5  " aria-hidden="true" />
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={handleSearchChange}
+                      className="p-2 transition-opacity duration-300 ease-in-out flex-1 outline-none bg-transparent"
+                      placeholder="Search..."
+                      ref={searchInputRef}
+                    />
+                  </div>
 
+                  {searchQuery && (
+                    <div className="absolute top-full p-3 right-0 bg-footer text-white shadow-2xl rounded-md mt-1 z-10 w-[calc(100vw-40px)] lg:w-[650px]">
+                      {filteredBlogs.length > 0 ? (
+                        filteredBlogs.map((item, index) => (
+                          <Link
+                            key={index}
+                            href={`/${sanitizeUrl(
+                              item.article_category
+                            )}/${sanitizeUrl(item?.title)}`}
+                            title={item.title}
+                          >
+                            <div className="p-2 hover:bg-theme  border-b border-gray-400 text-gray-200">
+                              {item.title}
+                            </div>
+                          </Link>
+                        ))
+                      ) : (
+                        <div className="p-2 text-gray-500">
+                          No results found
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </Container>
@@ -92,46 +149,11 @@ export default function Navbar({
         </Container>
       </FullContainer>
 
-
-      {/* Search Input (on mobile) */}
-      {openSearch && (
-        <div className="fixed lg:absolute top-16 lg:right-0 w-full lg:w-fit flex flex-col items-start justify-center lg:justify-end left-0 px-4 lg:px-0">
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={handleSearchChange}
-            className="lg:text-xl border border-gray-300 inputField rounded-md outline-none bg-white shadow-xl p-2 px-3 mx-auto transition-opacity duration-300 ease-in-out opacity-100 w-5/6 lg:w-[650px] focus:ring-2 focus:ring-yellow-500"
-            placeholder="Search..."
-            autoFocus
-          />
-          {searchQuery && (
-            <div className="lg:absolute top-full p-1 lg:p-3 right-0 bg-white shadow-2xl rounded-md mt-1 z-10 mx-auto w-5/6 lg:w-[650px]">
-              {filteredBlogs?.length > 0 ? (
-                filteredBlogs.map((item, index) => (
-                  <Link
-                    key={index}
-                    title={item.title}
-                    href={`/${sanitizeUrl(item.article_category)}/${sanitizeUrl(
-                      item?.title
-                    )}`}
-                  >
-                    <div className="p-2 hover:bg-gray-200 border-b text-gray-600">
-                      {item.title}
-                    </div>
-                  </Link>
-                ))
-              ) : (
-                <div className="p-2 text-gray-600">No articles found.</div>
-              )}
-            </div>
-          )}
-        </div>
-      )}
-
       {/* Sidebar */}
       <div
-        className={`sidebar fixed top-0 right-0 h-screen flex flex-col justify-between bg-theme shadow-lg text-white z-50 overflow-x-hidden p-10 lg:p-6 ${sidebar ? "open" : "-mr-96"
-          }`}
+        className={`sidebar fixed top-0 right-0 h-screen flex flex-col justify-between bg-theme shadow-lg text-white z-50 overflow-x-hidden p-10 lg:p-6 ${
+          sidebar ? "open" : "-mr-96"
+        }`}
       >
         <div>
           <div className="flex items-center justify-between">
@@ -142,12 +164,39 @@ export default function Navbar({
             />
           </div>
 
-          <div className="flex lg:hidden items-center gap-3 font-normal mt-8 w-full">
-            <Search className="w-7" />
-            <input
-              className="bg-transparent border-b border-white/50 pb-1 outline-none flex-1"
-              placeholder="Search..."
-            />
+          <div className="relative w-full mt-8">
+            <div className="flex lg:hidden items-center gap-3 font-normal w-full">
+              <Search className="w-7" />
+              <input
+                className="bg-transparent border-b border-white/50 pb-1 outline-none flex-1"
+                placeholder="Search..."
+                type="text"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                ref={searchInputRef}
+              />
+            </div>
+            {searchQuery && (
+              <div className="absolute left-0 top-full mt-2 bg-footer text-white shadow-2xl rounded-md z-10 w-full max-h-60 overflow-y-auto">
+                {filteredBlogs.length > 0 ? (
+                  filteredBlogs.map((item, index) => (
+                    <Link
+                      key={index}
+                      href={`/${sanitizeUrl(
+                        item.article_category
+                      )}/${sanitizeUrl(item?.title)}`}
+                      title={item.title}
+                    >
+                      <div className="p-2 hover:bg-theme border-b border-gray-400 text-gray-200">
+                        {item.title}
+                      </div>
+                    </Link>
+                  ))
+                ) : (
+                  <div className="p-2 text-gray-500">No results found</div>
+                )}
+              </div>
+            )}
           </div>
 
           <div className="flex flex-col pt-10">
@@ -164,13 +213,20 @@ export default function Navbar({
                 {item.title}
               </Link>
             ))}
-
           </div>
           <div className="flex flex-col  ">
-            <Link title="About" href="/about" className=" font-semibold capitalize  text-white py-2 px-2 border-b border-gray-600">
+            <Link
+              title="About"
+              href="/about"
+              className=" font-semibold capitalize  text-white py-2 px-2 border-b border-gray-600"
+            >
               About Us
             </Link>
-            <Link title="Contact Us" href="/contact" className="font-semibold capitalize text-white py-2 px-2 border-b border-gray-600">
+            <Link
+              title="Contact Us"
+              href="/contact"
+              className="font-semibold capitalize text-white py-2 px-2 border-b border-gray-600"
+            >
               Contact Us
             </Link>
           </div>

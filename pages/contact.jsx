@@ -31,6 +31,7 @@ export default function Contact({
   blog_list,
   footer_type,
   contact_details,
+  about_me,
 }) {
   const breadcrumbs = useBreadcrumbs();
 
@@ -93,6 +94,8 @@ export default function Contact({
       {/* Map Section */}
       <FullContainer>
         <Container>
+          <Breadcrumbs breadcrumbs={breadcrumbs} className="  mt-3 mb-6 " />
+
           {contact_details?.mapDetails?.mapUrl ? (
             <LoadScript googleMapsApiKey="AIzaSyAPeJFoV41Bq2QOImPkf3Dai8hP6aZ7MFg">
               <GoogleMap
@@ -117,27 +120,34 @@ export default function Contact({
               <Phone className="w-14 h-14 p-2 rounded-lg text-primary1" />
             </div>
             <p className="text-lg font-bold text-white">Phone Number</p>
-            <p className="text-lg font-bold text-white">{contact_details?.phone}</p>
+            <p className="text-lg font-bold text-white">
+              {contact_details?.phone}
+            </p>
           </div>
           <div className="w-full items-center justify-center bg-footer p-10 rounded-xl border-gray-500 py-12 px-4 gap-3">
             <div className="flex justify-center">
               <MailOpen className="w-14 h-14 p-2 rounded-lg text-primary1" />
             </div>
             <p className="text-lg font-bold text-white">Email Address</p>
-            <p className="text-lg font-bold text-white">{contact_details?.email}</p>
+            <p className="text-lg font-bold text-white">
+              {contact_details?.email}
+            </p>
           </div>
           <div className="w-full items-center justify-center bg-footer p-10 rounded-xl border-gray-500 py-12 px-4 gap-3">
             <div className="flex justify-center">
               <MapIcon className="w-14 h-14 p-2 rounded-lg text-primary1" />
             </div>
             <p className="text-lg font-bold text-white">Office Location</p>
-            <p className="text-lg font-bold text-white">{contact_details?.address}</p>
+            <p className="text-lg font-bold text-white">
+              {contact_details?.address}
+            </p>
           </div>
         </Container>
       </FullContainer>
 
       {/* Footer Section */}
       <Footer
+        about_me={about_me}
         logo={logo}
         imagePath={imagePath}
         blog_list={blog_list}
@@ -152,14 +162,14 @@ export default function Contact({
           "@graph": [
             {
               "@type": "WebSite",
-              "@id": `http://${domain}/#website`,
-              url: `http://${domain}/`,
-              name: domain,
+              "@id": `https://${domain}/contact`,
+              url: `https://${domain}/contact`,
+              name: meta?.title,
               description: meta?.description,
               inLanguage: "en-US",
               publisher: {
                 "@type": "Organization",
-                "@id": `http://${domain}`,
+                "@id": `https://${domain}`,
               },
             },
             {
@@ -168,7 +178,7 @@ export default function Contact({
                 "@type": "ListItem",
                 position: index + 1,
                 name: breadcrumb.label,
-                item: `http://${domain}${breadcrumb.url}`,
+                item: `https://${domain}${breadcrumb.url}`,
               })),
             },
           ],
@@ -197,6 +207,7 @@ export async function getServerSideProps({ req, query }) {
   const layout = await callBackendApi({ domain, type: "layout" });
   const nav_type = await callBackendApi({ domain, type: "nav_type" });
   const footer_type = await callBackendApi({ domain, type: "footer_type" });
+  const about_me = await callBackendApi({ domain, query, type: "about_me" });
 
   let project_id = logo?.data[0]?.project_id || null;
   let imagePath = null;
@@ -206,11 +217,12 @@ export async function getServerSideProps({ req, query }) {
     props: {
       domain,
       imagePath,
-      logo: logo?.data[0],
+      logo: logo?.data[0] || null,
       blog_list: blog_list.data[0].value,
       layout: layout?.data[0]?.value || null,
       contact_details: contact_details.data[0]?.value || null,
       categories: categories?.data[0]?.value || null,
+      about_me: about_me.data[0] || null,
       meta: meta?.data[0]?.value || null,
       favicon: favicon?.data[0]?.file_name || null,
       nav_type: nav_type?.data[0]?.value || {},
