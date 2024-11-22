@@ -217,11 +217,14 @@ export default function Category({
               })),
             },
             {
-              "@type": "WebSite",
+              "@type": "WebPage",
               "@id": `https://${domain}/${category}`,
               url: `https://${domain}/${category}`,
-              name: meta?.title,
-              description: meta?.description,
+              name: meta?.title?.replaceAll("##category##", category),
+              description: meta?.description?.replaceAll(
+                "##category##",
+                category
+              ),
               inLanguage: "en-US",
               publisher: {
                 "@type": "Organization",
