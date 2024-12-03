@@ -141,7 +141,6 @@ export default function Home({
             </div>
 
             {/* Categories Section */}
-
           </div>
         </Container>
       </FullContainer>
@@ -240,8 +239,8 @@ export default function Home({
                     "@id": `http://${domain}/${blog?.article_category
                       ?.replaceAll(" ", "-")
                       ?.toLowerCase()}/${blog.title
-                        ?.replaceAll(" ", "-")
-                        ?.toLowerCase()}`,
+                      ?.replaceAll(" ", "-")
+                      ?.toLowerCase()}`,
                   },
                 },
               })),
