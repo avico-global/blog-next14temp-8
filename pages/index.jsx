@@ -7,7 +7,6 @@ import Footer from "@/components/containers/Footer";
 import GoogleTagManager from "@/lib/GoogleTagManager";
 import MustRead from "@/components/containers/MustRead";
 import FullContainer from "@/components/common/FullContainer";
-import SectionHeading from "@/components/common/SectionHeading";
 import MostPopular from "@/components/containers/MostPopular";
 import Rightbar from "@/components/containers/Rightbar";
 import Container from "@/components/common/Container";
@@ -22,10 +21,6 @@ import {
   callBackendApi,
 } from "@/lib/myFun";
 
-// Font
-import dayjs from "dayjs";
-import Link from "next/link";
-import Image from "next/image";
 import Banner from "@/components/containers/Banner";
 import LatestBlogs from "@/components/containers/LatestBlogs";
 import AllArticles from "@/components/containers/AllArticles";
@@ -157,96 +152,96 @@ export default function Home({
 
       {/* JSON-LD */}
       <JsonLd
-          data={{
-            "@context": "https://www.schema.org",
-            "@graph": [
-              {
-                "@type": "WebPage",
-                "@id": `https://${domain}/`,
-                url: `https://${domain}/`,
-                name: meta?.title,
-                isPartOf: {
-                  "@id": `https://${domain}`,
-                },
-                description: meta?.description,
-                inLanguage: "en-US",
-                primaryImageOfPage: {
-                  "@type": "ImageObject",
-                  url: `${imagePath}/${banner?.file_name}`,
-                  width: 1920,
-                  height: 1080,
-                },
-                mainEntityOfPage: {
-                  "@type": "WebPage",
-                  "@id": `https://${domain}`,
-                },
-              },
-              {
-                "@type": "WebSite",
+        data={{
+          "@context": "https://www.schema.org",
+          "@graph": [
+            {
+              "@type": "WebPage",
+              "@id": `https://${domain}/`,
+              url: `https://${domain}/`,
+              name: meta?.title,
+              isPartOf: {
                 "@id": `https://${domain}`,
-                url: `https://${domain}`,
-                name: domain,
-                description: meta?.description,
-                inLanguage: "en-US",
-                publisher: {
-                  "@type": "Organization",
-                  "@id": `https://${domain}`,
-                },
               },
-              {
+              description: meta?.description,
+              inLanguage: "en-US",
+              primaryImageOfPage: {
+                "@type": "ImageObject",
+                url: `${imagePath}/${banner?.file_name}`,
+                width: 1920,
+                height: 1080,
+              },
+              mainEntityOfPage: {
+                "@type": "WebPage",
+                "@id": `https://${domain}`,
+              },
+            },
+            {
+              "@type": "WebSite",
+              "@id": `https://${domain}`,
+              url: `https://${domain}`,
+              name: domain,
+              description: meta?.description,
+              inLanguage: "en-US",
+              publisher: {
                 "@type": "Organization",
                 "@id": `https://${domain}`,
-                name: domain,
-                url: `https://${domain}`,
-                logo: {
-                  "@type": "ImageObject",
-                  url: `${imagePath}/${logo.file_name}`,
-                  width: logo.width,
-                  height: logo.height,
-                },
-                sameAs: [
-                  "https://www.facebook.com",
-                  "https://www.twitter.com",
-                  "https://instagram.com",
-                ],
               },
-              {
-                "@type": "ItemList",
-                url: `https://${domain}`,
-                name: "blog",
-                itemListElement: blog_list?.map((blog, index) => ({
-                  "@type": "ListItem",
-                  position: index + 1,
-                  item: {
-                    "@type": "Article",
-                    url: `https://${domain}/${blog?.article_category}/${blog.key}`,
-                    name: blog.title,
-                    author: {
-                      "@type": "Person",
-                      name: blog.author,
-                    },
-                    datePublished: blog.datePublished,
-                    dateModified: blog.dateModified,
-                    image: {
-                      "@type": "ImageObject",
-                      url: `${imagePath}/${blog.image}`,
-                      width: blog.imageWidth,
-                      height: blog.imageHeight,
-                    },
-                    headline: blog.title,
-                    description: blog.description,
-                    mainEntityOfPage: {
-                      "@type": "WebPage",
-                      "@id": `https://${domain}/${sanitizeUrl(
-                        blog?.article_category
-                      )}/${sanitizeUrl(blog.title)}`,
-                    },
+            },
+            {
+              "@type": "Organization",
+              "@id": `https://${domain}`,
+              name: domain,
+              url: `https://${domain}`,
+              logo: {
+                "@type": "ImageObject",
+                url: `${imagePath}/${logo.file_name}`,
+                width: logo.width,
+                height: logo.height,
+              },
+              sameAs: [
+                "https://www.facebook.com",
+                "https://www.twitter.com",
+                "https://instagram.com",
+              ],
+            },
+            {
+              "@type": "ItemList",
+              url: `https://${domain}`,
+              name: "blog",
+              itemListElement: blog_list?.map((blog, index) => ({
+                "@type": "ListItem",
+                position: index + 1,
+                item: {
+                  "@type": "Article",
+                  url: `https://${domain}/${blog?.article_category}/${blog.key}`,
+                  name: blog.title,
+                  author: {
+                    "@type": "Person",
+                    name: blog.author,
                   },
-                })),
-              },
-            ],
-          }}
-        />
+                  datePublished: blog.datePublished,
+                  dateModified: blog.dateModified,
+                  image: {
+                    "@type": "ImageObject",
+                    url: `${imagePath}/${blog.image}`,
+                    width: blog.imageWidth,
+                    height: blog.imageHeight,
+                  },
+                  headline: blog.title,
+                  description: blog.description,
+                  mainEntityOfPage: {
+                    "@type": "WebPage",
+                    "@id": `https://${domain}/${sanitizeUrl(
+                      blog?.article_category
+                    )}/${sanitizeUrl(blog.title)}`,
+                  },
+                },
+              })),
+            },
+          ],
+        }}
+      />
     </div>
   );
 }
