@@ -27,15 +27,17 @@ export default function Contact({
   domain,
   logo,
   meta,
-  layout,
   blog_list,
   footer_type,
   contact_details,
   about_me,
+  page,
 }) {
   const breadcrumbs = useBreadcrumbs();
 
   return (
+    page?.enable && (
+
     <div className="flex flex-col justify-between">
       <Head>
         <meta charSet="UTF-8" />
@@ -161,7 +163,7 @@ export default function Contact({
           "@context": "https://schema.org",
           "@graph": [
             {
-              "@type": "WebSite",
+              "@type": "WebPage",
               "@id": `https://${domain}/contact`,
               url: `https://${domain}/contact`,
               name: meta?.title,
@@ -185,11 +187,17 @@ export default function Contact({
         }}
       />
     </div>
+    )
   );
 }
 
 export async function getServerSideProps({ req, query }) {
   const domain = getDomain(req?.headers?.host);
+
+  let layoutPages = await callBackendApi({
+    domain,
+    type: "layout",
+  });
   const logo = await callBackendApi({ domain, query, type: "logo" });
   const favicon = await callBackendApi({ domain, query, type: "favicon" });
   const blog_list = await callBackendApi({ domain, query, type: "blog_list" });
@@ -209,12 +217,25 @@ export async function getServerSideProps({ req, query }) {
   const footer_type = await callBackendApi({ domain, type: "footer_type" });
   const about_me = await callBackendApi({ domain, query, type: "about_me" });
 
+  let page = null;
+  if (Array.isArray(layoutPages?.data) && layoutPages.data.length > 0) {
+    const valueData = layoutPages.data[0].value;
+    page = valueData?.find((page) => page.page === "contact");
+  }
+
+  if (!page?.enable) {
+    return {
+      notFound: true,
+    };
+  }
+
   let project_id = logo?.data[0]?.project_id || null;
   let imagePath = null;
   imagePath = await getImagePath(project_id, domain);
 
   return {
     props: {
+      page,
       domain,
       imagePath,
       logo: logo?.data[0] || null,

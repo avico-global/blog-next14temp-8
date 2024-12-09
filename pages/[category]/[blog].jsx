@@ -36,6 +36,7 @@ export default function Blog({
   blog_type,
   imagePath,
   project_id,
+  page,
 }) {
   const router = useRouter();
   const { category, blog } = router.query;
@@ -64,6 +65,7 @@ export default function Blog({
   }, [category, router, blog]);
 
   return (
+    page?.enable &&(
     <div>
       <Head>
         <meta charSet="UTF-8" />
@@ -210,11 +212,19 @@ export default function Blog({
         }}
       />
     </div>
+    )
   );
 }
 
 export async function getServerSideProps({ req, query }) {
   const domain = getDomain(req?.headers?.host);
+  
+  let layoutPages = await callBackendApi({
+    domain,
+    type: "layout",
+  });
+
+
   const { category, blog } = query;
 
   const categories = await callBackendApi({ domain, type: "categories" });
@@ -248,11 +258,24 @@ export async function getServerSideProps({ req, query }) {
   const blog_type = await callBackendApi({ domain, type: "blog_type" });
   const footer_type = await callBackendApi({ domain, type: "footer_type" });
 
+  let page = null;
+  if (Array.isArray(layoutPages?.data) && layoutPages.data.length > 0) {
+    const valueData = layoutPages.data[0].value;
+    page = valueData?.find((page) => page.page === "blog page");
+  }
+
+  if (!page?.enable) {
+    return {
+      notFound: true,
+    };
+  }
+
   let project_id = logo?.data[0]?.project_id || null;
   let imagePath = await getImagePath(project_id, domain);
 
   return {
     props: {
+      page,
       domain,
       imagePath,
       logo: logo?.data[0] || null,

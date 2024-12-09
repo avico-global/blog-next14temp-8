@@ -10,13 +10,7 @@ import Breadcrumbs from "@/components/common/Breadcrumbs";
 import GoogleTagManager from "@/lib/GoogleTagManager";
 import JsonLd from "@/components/json/JsonLd";
 import useBreadcrumbs from "@/lib/useBreadcrumbs";
-import {
-  getDomain,
-  robotsTxt,
-  sanitizeUrl,
-  getImagePath,
-  callBackendApi,
-} from "@/lib/myFun";
+import { getDomain, getImagePath, callBackendApi } from "@/lib/myFun";
 
 export default function About({
   logo,
@@ -28,9 +22,9 @@ export default function About({
   meta,
   contact_details,
   favicon,
-  layout,
   nav_type,
   footer_type,
+  page,
 }) {
   const markdownIt = new MarkdownIt();
   const content = markdownIt?.render(about_me?.value);
@@ -43,115 +37,120 @@ export default function About({
   const breadcrumbs = useBreadcrumbs();
 
   return (
-    <div>
-      <Head>
-        <meta charSet="UTF-8" />
-        <title>{meta?.title}</title>
-        <meta name="description" content={meta?.description} />
-        <link rel="author" href={`https://www.${domain}`} />
-        <link rel="publisher" href={`https://www.${domain}`} />
-        <link rel="canonical" href={`https://www.${domain}/about`} />
-        <meta name="theme-color" content="#008DE5" />
-        <link rel="manifest" href="/manifest.json" />
-        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <GoogleTagManager />
-        <meta
-          name="google-site-verification"
-          content="zbriSQArMtpCR3s5simGqO5aZTDqEZZi9qwinSrsRPk"
+    page?.enable && (
+      <div>
+        <Head>
+          <meta charSet="UTF-8" />
+          <title>{meta?.title}</title>
+          <meta name="description" content={meta?.description} />
+          <link rel="author" href={`https://www.${domain}`} />
+          <link rel="publisher" href={`https://www.${domain}`} />
+          <link rel="canonical" href={`https://www.${domain}/about`} />
+          <meta name="theme-color" content="#008DE5" />
+          <link rel="manifest" href="/manifest.json" />
+          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+          />
+          <GoogleTagManager />
+          <meta
+            name="google-site-verification"
+            content="zbriSQArMtpCR3s5simGqO5aZTDqEZZi9qwinSrsRPk"
+          />
+          <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${favicon}`}
+          />
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${favicon}`}
+          />
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${favicon}`}
+          />
+        </Head>
+
+        <Navbar
+          logo={logo}
+          nav_type={nav_type}
+          imagePath={imagePath}
+          blog_list={blog_list}
+          categories={categories}
+          contact_details={contact_details}
         />
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${favicon}`}
+
+        <AboutBanner image={`${imagePath}/${about_me.file_name}`} />
+
+        <FullContainer>
+          <Container className="pb-16 ">
+            <Breadcrumbs breadcrumbs={breadcrumbs} className="mt-2  mb-6 " />
+
+            <div className="grid gap-16 w-full">
+              <div
+                className="markdown-content text-white about_me prose max-w-full"
+                dangerouslySetInnerHTML={{ __html: content }}
+              />
+            </div>
+          </Container>
+        </FullContainer>
+
+        <Footer
+          blog_list={blog_list}
+          categories={categories}
+          logo={logo}
+          imagePath={imagePath}
+          contact_details={contact_details}
+          about_me={about_me}
+          footer_type={footer_type}
         />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${favicon}`}
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${favicon}`}
-        />
-      </Head>
 
-      {/* Navbar Section */}
-      <Navbar
-        logo={logo}
-        nav_type={nav_type}
-        imagePath={imagePath}
-        blog_list={blog_list}
-        categories={categories}
-        contact_details={contact_details}
-      />
-
-      {/* Banner Section */}
-      <AboutBanner image={`${imagePath}/${about_me.file_name}`} />
-
-      {/* Content Section */}
-      <FullContainer>
-        <Container className="pb-16 ">
-          <Breadcrumbs breadcrumbs={breadcrumbs} className="mt-2  mb-6 " />
-
-          <div className="grid gap-16 w-full">
-            <div
-              className="markdown-content text-white about_me prose max-w-full"
-              dangerouslySetInnerHTML={{ __html: content }}
-            />
-          </div>
-        </Container>
-      </FullContainer>
-
-      {/* Footer Section */}
-      <Footer
-        blog_list={blog_list}
-        categories={categories}
-        logo={logo}
-        imagePath={imagePath}
-        contact_details={contact_details}
-        about_me={about_me}
-        footer_type={footer_type}
-      />
-
-      {/* JSON-LD Structured Data */}
-      <JsonLd
-        data={{
-          "@context": "https://schema.org",
-          "@graph": [
-            {
-              "@type": "WebSite",
-              "@id": `http://${domain}/#website`,
-              url: `http://${domain}/`,
-              name: domain,
-              description: meta?.description,
-              inLanguage: "en-US",
-              publisher: {
-                "@type": "Organization",
-                "@id": `http://${domain}`,
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "WebPage",
+                "@id": `http://${domain}/#website`,
+                url: `http://${domain}/`,
+                name: domain,
+                description: meta?.description,
+                inLanguage: "en-US",
+                publisher: {
+                  "@type": "Organization",
+                  "@id": `http://${domain}`,
+                },
               },
-            },
-            {
-              "@type": "BreadcrumbList",
-              itemListElement: breadcrumbs.map((breadcrumb, index) => ({
-                "@type": "ListItem",
-                position: index + 1,
-                name: breadcrumb.label,
-                item: `http://${domain}${breadcrumb.url}`,
-              })),
-            },
-          ],
-        }}
-      />
-    </div>
+              {
+                "@type": "BreadcrumbList",
+                itemListElement: breadcrumbs.map((breadcrumb, index) => ({
+                  "@type": "ListItem",
+                  position: index + 1,
+                  name: breadcrumb.label,
+                  item: `http://${domain}${breadcrumb.url}`,
+                })),
+              },
+            ],
+          }}
+        />
+      </div>
+    )
   );
 }
 
 export async function getServerSideProps({ req, query }) {
   const domain = getDomain(req?.headers?.host);
+  let layoutPages = await callBackendApi({
+    domain,
+    type: "layout",
+  });
+
   const logo = await callBackendApi({ domain, query, type: "logo" });
   const favicon = await callBackendApi({ domain, query, type: "favicon" });
   const about_me = await callBackendApi({ domain, query, type: "about_me" });
@@ -172,6 +171,19 @@ export async function getServerSideProps({ req, query }) {
     query,
     type: "copyright",
   });
+
+  let page = null;
+  if (Array.isArray(layoutPages?.data) && layoutPages.data.length > 0) {
+    const valueData = layoutPages.data[0].value;
+    page = valueData?.find((page) => page.page === "about");
+  }
+
+  if (!page?.enable) {
+    return {
+      notFound: true,
+    };
+  }
+
   const layout = await callBackendApi({ domain, type: "layout" });
   const nav_type = await callBackendApi({ domain, type: "nav_type" });
   const footer_type = await callBackendApi({ domain, type: "footer_type" });
@@ -182,6 +194,7 @@ export async function getServerSideProps({ req, query }) {
 
   return {
     props: {
+      page,
       domain,
       imagePath,
       meta: meta?.data[0]?.value || null,
