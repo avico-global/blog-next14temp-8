@@ -7,7 +7,6 @@ import Footer from "@/components/containers/Footer";
 import GoogleTagManager from "@/lib/GoogleTagManager";
 import MustRead from "@/components/containers/MustRead";
 import FullContainer from "@/components/common/FullContainer";
-import SectionHeading from "@/components/common/SectionHeading";
 import MostPopular from "@/components/containers/MostPopular";
 import Rightbar from "@/components/containers/Rightbar";
 import Container from "@/components/common/Container";
@@ -22,10 +21,6 @@ import {
   callBackendApi,
 } from "@/lib/myFun";
 
-// Font
-import dayjs from "dayjs";
-import Link from "next/link";
-import Image from "next/image";
 import Banner from "@/components/containers/Banner";
 import LatestBlogs from "@/components/containers/LatestBlogs";
 import AllArticles from "@/components/containers/AllArticles";
