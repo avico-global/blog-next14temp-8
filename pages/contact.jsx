@@ -84,68 +84,124 @@ export default function Contact({
         contact_details={contact_details}
       />
 
-      {/* Breadcrumbs Section */}
-      <FullContainer>
-        <Container className="w-full py-28 bg-contact mb-10">
-          <h1 className="text-5xl font-bold capitalize px-4 py-1 text-white">
-            Contact Us
-          </h1>
-        </Container>
-      </FullContainer>
+      {/* Contact Form Section */}
+        <div className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b ">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              {/* Left Side - Image and Contact Info */}
+              <div className="hidden lg:block">
+                <div className="relative h-[600px] rounded-2xl overflow-hidden">
+                  <img
+                    src={`${imagePath}/${about_me.file_name}`} 
+                    alt="Contact Us"
+                    className="object-cover w-full h-full"
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-8">
+                    <div className="space-y-4">
+                      <div className="flex items-center text-gray-100">
+                        <Phone className="w-5 h-5 mr-3" />
+                        <span>{contact_details?.phone || "+1 (555) 000-0000"}</span>
+                      </div>
+                      <div className="flex items-center text-gray-100">
+                        <MailOpen className="w-5 h-5 mr-3" />
+                        <span>{contact_details?.email || "contact@example.com"}</span>
+                      </div>
+                      <div className="flex items-center text-gray-100">
+                        <MapIcon className="w-5 h-5 mr-3" />
+                        <span>{contact_details?.address || "123 Business Street, City, Country"}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-      {/* Map Section */}
-      <FullContainer>
-        <Container>
-          <Breadcrumbs breadcrumbs={breadcrumbs} className="  mt-3 mb-6 " />
+              {/* Right Side - Contact Form */}
+              <div>
+                <div className="text-center mb-12 lg:text-left ">
+                  <h2 className="text-4xl font-bold text-white mb-4">Get in Touch</h2>
+                  <p className="text-lg text-gray-300">We&apos;d love to hear from you. Please fill out this form.</p>
+                </div>
+                
+                <div className="rounded-2xl shadow-2xl p-8 md:p-12 border border-gray-700">
+                  <form className="space-y-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="relative">
+                        <label htmlFor="name" className="block text-sm font-semibold text-gray-300 mb-2">
+                          Full Name
+                        </label>
+                        <div className="relative">
+                          <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            className="w-full px-4 py-3 rounded-lg border border-gray-700 focus:border-gray-500 focus:ring-2 focus:ring-gray-800 transition-all duration-200 bg-transparent text-white placeholder-gray-400"
+                            placeholder="John Doe"
+                            required
+                          />
+                        </div>
+                      </div>
 
-          {contact_details?.mapDetails?.mapUrl ? (
-            <LoadScript googleMapsApiKey="AIzaSyAPeJFoV41Bq2QOImPkf3Dai8hP6aZ7MFg">
-              <GoogleMap
-                mapContainerClassName="h-[500px] w-full rouded-md"
-                center={contact_details?.mapDetails?.center}
-                zoom={12}
-              >
-                <Marker position={contact_details?.mapDetails?.center} />
-              </GoogleMap>
-            </LoadScript>
-          ) : (
-            <Map location="united states" />
-          )}
-        </Container>
-      </FullContainer>
+                      <div className="relative">
+                        <label htmlFor="email" className="block text-sm font-semibold text-gray-300 mb-2">
+                          Email Address
+                        </label>
+                        <div className="relative">
+                          <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            className="w-full px-4 py-3 rounded-lg border border-gray-700 focus:border-gray-500 focus:ring-2 focus:ring-gray-800 transition-all duration-200 bg-transparent text-white placeholder-gray-400"
+                            placeholder="john@example.com"
+                            required
+                          />
+                        </div>
+                      </div>
+                    </div>
 
-      {/* Contact Info Section */}
-      <FullContainer>
-        <Container className="flex lg:flex-row mt-10 text-center text-gray-500 text-xs gap-8">
-          <div className="items-center justify-center w-full bg-footer p-10 rounded-xl border-gray-500 py-12 px-4 gap-3">
-            <div className="flex justify-center">
-              <Phone className="w-14 h-14 p-2 rounded-lg text-primary1" />
+                    <div className="relative">
+                      <label htmlFor="phone" className="block text-sm font-semibold text-gray-300 mb-2">
+                        Phone Number
+                      </label>
+                      <div className="relative">
+                        <input
+                          type="tel"
+                          id="phone"
+                          name="phone"
+                          className="w-full px-4 py-3 rounded-lg border border-gray-700 focus:border-gray-500 focus:ring-2 focus:ring-gray-800 transition-all duration-200 bg-transparent text-white placeholder-gray-400"
+                          placeholder="+1 (555) 000-0000"
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div className="relative">
+                      <label htmlFor="message" className="block text-sm font-semibold text-gray-300 mb-2">
+                        Your Message
+                      </label>
+                      <textarea
+                        id="message"
+                        name="message"
+                        rows={6}
+                        className="w-full px-4 py-3 rounded-lg border border-gray-700 focus:border-gray-500 focus:ring-2 focus:ring-gray-800 transition-all duration-200 bg-transparent text-white placeholder-gray-400 resize-none"
+                        placeholder="Write your message here..."
+                        required
+                      />
+                    </div>
+
+                    <div className="mt-8">
+                      <button
+                        type="submit"
+                        className="w-full bg-primary1 text-white px-6 py-4 rounded-lg font-semibold text-base  focus:outline-none focus:ring-4  transform transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl "
+                      >
+                        Send Message
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
             </div>
-            <p className="text-lg font-bold text-white">Phone Number</p>
-            <p className="text-lg font-bold text-white">
-              {contact_details?.phone}
-            </p>
           </div>
-          <div className="w-full items-center justify-center bg-footer p-10 rounded-xl border-gray-500 py-12 px-4 gap-3">
-            <div className="flex justify-center">
-              <MailOpen className="w-14 h-14 p-2 rounded-lg text-primary1" />
-            </div>
-            <p className="text-lg font-bold text-white">Email Address</p>
-            <p className="text-lg font-bold text-white">
-              {contact_details?.email}
-            </p>
-          </div>
-          <div className="w-full items-center justify-center bg-footer p-10 rounded-xl border-gray-500 py-12 px-4 gap-3">
-            <div className="flex justify-center">
-              <MapIcon className="w-14 h-14 p-2 rounded-lg text-primary1" />
-            </div>
-            <p className="text-lg font-bold text-white">Office Location</p>
-            <p className="text-lg font-bold text-white">
-              {contact_details?.address}
-            </p>
-          </div>
-        </Container>
-      </FullContainer>
+        </div>
 
       {/* Footer Section */}
       <Footer

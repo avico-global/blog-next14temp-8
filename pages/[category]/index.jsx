@@ -154,21 +154,16 @@ export default function Category({
                     </Link>
 
                     <div className="flex flex-col justify-center space-y-6 pt-6 ">
-                      <Link
-                        title={item?.title || "Article Link"}
-                        href={`/${sanitizeUrl(
-                          item.article_category
-                        )}/${sanitizeUrl(item?.title)}`}
-                      >
+                     
                         <Link
                           href={`/${sanitizeUrl(
                             item.article_category
                           )}/${sanitizeUrl(item?.title)}`}
                           className="mt-2 lg:mt-0 font-bold text-2xl hover:text-primary1 text-inherit leading-tight underline-white transition-all text-white"
                         >
+
                           {item.title}
                         </Link>
-                      </Link>
                       <div className="flex gap-2 mt-1 ">
                         <p className="text-normal text-gray-500">written by</p>
                         <p className="text-normal text-gray-300">

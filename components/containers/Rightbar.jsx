@@ -46,7 +46,7 @@ export default function Rightbar({
             className="-z-10 object-cover min-w-full min-h-full"
           />
           <div className="absolute inset-0  flex flex-col justify-center text-center p-4  font-bold text-white  text-xl bg-black bg-opacity-20">
-            <h3 className=" lg:text-3xl font-semibold ">About</h3>
+            <h2 className=" lg:text-3xl font-semibold ">About</h2>
           </div>
         </div>
         <div
