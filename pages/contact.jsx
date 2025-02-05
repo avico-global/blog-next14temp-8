@@ -118,7 +118,7 @@ export default function Contact({
               {/* Right Side - Contact Form */}
               <div>
                 <div className="text-center mb-12 lg:text-left ">
-                  <h2 className="text-4xl font-bold text-white mb-4">Get in Touch</h2>
+                  <h1 className="text-4xl font-bold text-white mb-4">Get in Touch</h1>
                   <p className="text-lg text-gray-300">We&apos;d love to hear from you. Please fill out this form.</p>
                 </div>
                 

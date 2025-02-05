@@ -20,6 +20,7 @@ import JsonLd from "@/components/json/JsonLd";
 import MarkdownIt from "markdown-it";
 import Image from "next/image";
 import Link from "next/link";
+import CategoryBreadcrumbs from "@/components/common/CategoryBreadcrumbs";
 
 export default function Category({
   logo,
@@ -113,7 +114,8 @@ export default function Category({
 
         <FullContainer className="py-16">
           <Container>
-            <Breadcrumbs breadcrumbs={breadcrumbs} className="mb-7" />
+            <Breadcrumbs breadcrumbs={breadcrumbs} className="mb-7 text-center " />
+            <CategoryBreadcrumbs breadcrumbs={breadcrumbs} className="mb-7 text-center "/>
 
             <div className="grid grid-cols-1 md:grid-cols-home gap-12 w-full ">
               <div className="w-full grid grid-cols-1 gap-4 rounded-xl pt-6 ">
