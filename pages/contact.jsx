@@ -85,120 +85,105 @@ export default function Contact({
       />
 
       {/* Contact Form Section */}
-        <div className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b ">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              {/* Left Side - Image and Contact Info */}
-              <div className="hidden lg:block">
-                <div className="relative h-[600px] rounded-2xl overflow-hidden">
-                  <img
-                    src={`${imagePath}/${about_me.file_name}`} 
-                    alt="Contact Us"
-                    className="object-cover w-full h-full"
-                  />
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-8">
-                    <div className="space-y-4">
-                      <div className="flex items-center text-gray-100">
-                        <Phone className="w-5 h-5 mr-3" />
-                        <span>{contact_details?.phone || "+1 (555) 000-0000"}</span>
-                      </div>
-                      <div className="flex items-center text-gray-100">
-                        <MailOpen className="w-5 h-5 mr-3" />
-                        <span>{contact_details?.email || "contact@example.com"}</span>
-                      </div>
-                      <div className="flex items-center text-gray-100">
-                        <MapIcon className="w-5 h-5 mr-3" />
-                        <span>{contact_details?.address || "123 Business Street, City, Country"}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Right Side - Contact Form */}
-              <div>
-                <div className="text-center mb-12 lg:text-left ">
-                  <h1 className="text-4xl font-bold text-white mb-4">Get in Touch</h1>
-                  <p className="text-lg text-gray-300">We&apos;d love to hear from you. Please fill out this form.</p>
-                </div>
-                
-                <div className="rounded-2xl shadow-2xl p-8 md:p-12 border border-gray-700">
-                  <form className="space-y-8">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                      <div className="relative">
-                        <label htmlFor="name" className="block text-sm font-semibold text-gray-300 mb-2">
-                          Full Name
-                        </label>
-                        <div className="relative">
-                          <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            className="w-full px-4 py-3 rounded-lg border border-gray-700 focus:border-gray-500 focus:ring-2 focus:ring-gray-800 transition-all duration-200 bg-transparent text-white placeholder-gray-400"
-                            placeholder="John Doe"
-                            required
-                          />
-                        </div>
-                      </div>
-
-                      <div className="relative">
-                        <label htmlFor="email" className="block text-sm font-semibold text-gray-300 mb-2">
-                          Email Address
-                        </label>
-                        <div className="relative">
-                          <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            className="w-full px-4 py-3 rounded-lg border border-gray-700 focus:border-gray-500 focus:ring-2 focus:ring-gray-800 transition-all duration-200 bg-transparent text-white placeholder-gray-400"
-                            placeholder="john@example.com"
-                            required
-                          />
-                        </div>
-                      </div>
-                    </div>
-
+        <div className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <h1 className="text-4xl font-bold text-white mb-4">Get in Touch</h1>
+              <p className="text-lg text-gray-300">We&apos;d love to hear from you. Please fill out this form.</p>
+            </div>
+            
+            <div className="rounded-2xl shadow-2xl p-8 md:p-12 border border-gray-700">
+              <form className="space-y-8">
+                {/* Name Fields in Flex */}
+                <div className="flex gap-4">
+                  <div className="relative flex-1">
+                    <label htmlFor="firstName" className="block text-sm font-semibold text-gray-300 mb-2">
+                      First Name
+                    </label>
                     <div className="relative">
-                      <label htmlFor="phone" className="block text-sm font-semibold text-gray-300 mb-2">
-                        Phone Number
-                      </label>
-                      <div className="relative">
-                        <input
-                          type="tel"
-                          id="phone"
-                          name="phone"
-                          className="w-full px-4 py-3 rounded-lg border border-gray-700 focus:border-gray-500 focus:ring-2 focus:ring-gray-800 transition-all duration-200 bg-transparent text-white placeholder-gray-400"
-                          placeholder="+1 (555) 000-0000"
-                          required
-                        />
-                      </div>
-                    </div>
-
-                    <div className="relative">
-                      <label htmlFor="message" className="block text-sm font-semibold text-gray-300 mb-2">
-                        Your Message
-                      </label>
-                      <textarea
-                        id="message"
-                        name="message"
-                        rows={6}
-                        className="w-full px-4 py-3 rounded-lg border border-gray-700 focus:border-gray-500 focus:ring-2 focus:ring-gray-800 transition-all duration-200 bg-transparent text-white placeholder-gray-400 resize-none"
-                        placeholder="Write your message here..."
+                      <input
+                        type="text"
+                        id="firstName"
+                        name="firstName"
+                        className="w-full px-4 py-3 rounded-lg border border-gray-700 focus:border-gray-500 focus:ring-2 focus:ring-gray-800 transition-all duration-200 bg-transparent text-white placeholder-gray-400"
+                        placeholder="John"
                         required
                       />
                     </div>
+                  </div>
 
-                    <div className="mt-8">
-                      <button
-                        type="submit"
-                        className="w-full bg-primary1 text-white px-6 py-4 rounded-lg font-semibold text-base  focus:outline-none focus:ring-4  transform transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl "
-                      >
-                        Send Message
-                      </button>
+                  <div className="relative flex-1">
+                    <label htmlFor="lastName" className="block text-sm font-semibold text-gray-300 mb-2">
+                      Last Name
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        id="lastName"
+                        name="lastName"
+                        className="w-full px-4 py-3 rounded-lg border border-gray-700 focus:border-gray-500 focus:ring-2 focus:ring-gray-800 transition-all duration-200 bg-transparent text-white placeholder-gray-400"
+                        placeholder="Doe"
+                        required
+                      />
                     </div>
-                  </form>
+                  </div>
                 </div>
-              </div>
+
+                <div className="relative">
+                  <label htmlFor="email" className="block text-sm font-semibold text-gray-300 mb-2">
+                    Email Address
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      className="w-full px-4 py-3 rounded-lg border border-gray-700 focus:border-gray-500 focus:ring-2 focus:ring-gray-800 transition-all duration-200 bg-transparent text-white placeholder-gray-400"
+                      placeholder="john@example.com"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="relative">
+                  <label htmlFor="phone" className="block text-sm font-semibold text-gray-300 mb-2">
+                    Phone Number
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      className="w-full px-4 py-3 rounded-lg border border-gray-700 focus:border-gray-500 focus:ring-2 focus:ring-gray-800 transition-all duration-200 bg-transparent text-white placeholder-gray-400"
+                      placeholder="+1 (555) 000-0000"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="relative">
+                  <label htmlFor="message" className="block text-sm font-semibold text-gray-300 mb-2">
+                    Your Message
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows={6}
+                    className="w-full px-4 py-3 rounded-lg border border-gray-700 focus:border-gray-500 focus:ring-2 focus:ring-gray-800 transition-all duration-200 bg-transparent text-white placeholder-gray-400 resize-none"
+                    placeholder="Write your message here..."
+                    required
+                  />
+                </div>
+
+                <div className="mt-8">
+                  <button
+                    type="submit"
+                    className="w-full bg-primary1 text-white px-6 py-4 rounded-lg font-semibold text-base focus:outline-none focus:ring-4 transform transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl"
+                  >
+                    Send Message
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
