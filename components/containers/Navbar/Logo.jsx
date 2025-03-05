@@ -77,7 +77,7 @@ const Logo = ({ logo, imagePath }) => {
         />
       ) : logoType === "text" ? (
         <h2
-          className="text-4xl font-extrabold py-1 text-white  whitespace-nowrap"
+          className="text-2xl font-extrabold py-1 text-white  whitespace-nowrap"
           style={{
             fontSize: `${fontSize}px`,
             fontWeight: isBold ? "bold" : "normal",
