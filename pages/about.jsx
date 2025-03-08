@@ -35,6 +35,10 @@ export default function About({
   }, [blog_list]);
 
   const breadcrumbs = useBreadcrumbs();
+ 
+  console.log( "Image ", about_me?.file_name)
+  console.log( "Image ", imagePath)
+
 
   return (
     page?.enable && (
@@ -86,7 +90,8 @@ export default function About({
           contact_details={contact_details}
         />
 
-        <AboutBanner image={`${imagePath}/${about_me.file_name}`} />
+
+        <AboutBanner image={`${imagePath}/${about_me.file_name}`} /> 
 
         <FullContainer>
           <Container className="pb-16 ">
