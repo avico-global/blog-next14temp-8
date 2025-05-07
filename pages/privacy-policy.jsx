@@ -1,32 +1,36 @@
 import React, { useEffect } from "react";
-import { useRouter } from "next/router";
-import JsonLd from "@/components/json/JsonLd";
-import useBreadcrumbs from "@/lib/useBreadcrumbs";
 import Breadcrumbs from "@/components/common/Breadcrumbs";
-
-// Components
-import MarkdownIt from "markdown-it";
+import useBreadcrumbs from "@/lib/useBreadcrumbs";
+import JsonLd from "@/json/JsonLd";
+import { useRouter } from "next/router";
+import Container from "@/components/common/Container";
+import Fullcontainer from "@/components/common/Fullcontainer";
 import Navbar from "@/components/containers/Navbar";
 import Footer from "@/components/containers/Footer";
 import GoogleTagManager from "@/lib/GoogleTagManager";
-import Container from "@/components/common/Container";
-import FullContainer from "@/components/common/FullContainer";
-import { callBackendApi, getDomain, getImagePath } from "@/lib/myFun";
+import MarkdownIt from "markdown-it";
+import {
+  callBackendApi,
+  getDomain,
+  getImagePath,
+} from "@/lib/myFun";
 
 import Head from "next/head";
+import { Raleway } from "next/font/google";
+const myFont = Raleway({
+  subsets: ["cyrillic", "cyrillic-ext", "latin", "latin-ext"],
+});
 
 export default function PriavcyPolicy({
-  domain,
-  imagePath,
-  logo,
-  favicon,
-  blog_list,
   categories,
-  meta,
-  contact_details,
+  imagePath,
+  favicon,
   policy,
-  layout,
-  nav_type,
+  logo,
+  meta,
+  domain,
+  about_me,
+blog_list
 }) {
   const markdownIt = new MarkdownIt();
   const content = markdownIt.render(policy || "");
@@ -40,17 +44,17 @@ export default function PriavcyPolicy({
     }
   }, [currentPath, router]);
 
-  const page = layout?.find((page) => page.page === "privacy policy");
-
   return (
-    <div>
+    <div
+      className={`min-h-screen flex flex-col justify-between ${myFont.className}`}
+    >
       <Head>
         <meta charSet="UTF-8" />
         <title>{meta?.title}</title>
         <meta name="description" content={meta?.description} />
-        <link rel="author" href={`https://www.${domain}`} />
-        <link rel="publisher" href={`https://www.${domain}`} />
-        <link rel="canonical" href={`https://www.${domain}/privacy-policy`} />
+        <link rel="author" href={`https://${domain}`} />
+        <link rel="publisher" href={`https://${domain}`} />
+        <link rel="canonical" href={`https://${domain}/privacy-policy`} />
         {/* <meta name="robots" content="noindex" /> */}
         <meta name="theme-color" content="#008DE5" />
         <link rel="manifest" href="/manifest.json" />
@@ -80,56 +84,29 @@ export default function PriavcyPolicy({
         />
       </Head>
 
-      {page?.enable
-        ? page?.sections?.map((item, index) => {
-            if (!item.enable) return null;
-            switch (item.section?.toLowerCase()) {
-              case "navbar":
-                return (
-                  <Navbar
-                    key={index}
-                    logo={logo}
-                    nav_type={nav_type}
-                    imagePath={imagePath}
-                    blog_list={blog_list}
-                    categories={categories}
-                  />
-                );
-              case "breadcrumbs":
-                return (
-                  <FullContainer key={index}>
-                    <Container>
-                      <Breadcrumbs breadcrumbs={breadcrumbs} className="py-7" />
-                    </Container>
-                  </FullContainer>
-                );
-              case "text":
-                return (
-                  <FullContainer key={index}>
-                    <Container>
-                      <div
-                        className="prose max-w-full w-full mb-5"
-                        dangerouslySetInnerHTML={{ __html: content }}
-                      />
-                    </Container>
-                  </FullContainer>
-                );
-              case "footer":
-                return (
-                  <Footer
-                    key={index}
-                    blog_list={blog_list}
-                    categories={categories}
-                    copyright=""
-                    logo={logo}
-                    imagePath={imagePath}
-                  />
-                );
-              default:
-                return null;
-            }
-          })
-        : "Page Disabled, under maintenance"}
+      <Navbar logo={logo} imagePath={imagePath} categories={categories} blog_list={blog_list} />
+
+      <Fullcontainer>
+        <Container>
+          <Breadcrumbs breadcrumbs={breadcrumbs} className="pt-28" />
+        </Container>
+      </Fullcontainer>
+
+      <Fullcontainer>
+        <Container>
+          <div
+            className="prose text-gray-200 max-w-full w-full mb-5"
+            dangerouslySetInnerHTML={{ __html: content }}
+          />
+        </Container>
+      </Fullcontainer>
+
+      <Footer
+        categories={categories}
+        imagePath={imagePath}
+        logo={logo}
+        about_me={about_me}
+      />
 
       <JsonLd
         data={{
@@ -137,71 +114,14 @@ export default function PriavcyPolicy({
           "@graph": [
             {
               "@type": "WebPage",
-              "@id": `http://${domain}/`,
-              url: `http://${domain}/`,
+              "@id": `https://${domain}/privacy-policy`,
+              url: `https://${domain}/privacy-policy`,
               name: meta?.title,
+              description: meta?.description,
               isPartOf: {
-                "@id": `http://${domain}`,
+                "@id": `https://${domain}`,
               },
-              description: meta?.description,
               inLanguage: "en-US",
-            },
-            {
-              "@type": "Organization",
-              "@id": `http://${domain}`,
-              name: domain,
-              url: `http://${domain}/`,
-              logo: {
-                "@type": "ImageObject",
-                url: `${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${logo.file_name}`,
-              },
-              sameAs: [
-                "http://www.facebook.com",
-                "http://www.twitter.com",
-                "http://instagram.com",
-              ],
-            },
-            {
-              "@type": "WebSite",
-              "@id": `http://${domain}/#website`,
-              url: `http://${domain}/`,
-              name: domain,
-              description: meta?.description,
-              inLanguage: "en-US",
-              // potentialAction: {
-              //   "@type": "SearchAction",
-              //   target: `http://${domain}/search?q={search_term_string}`,
-              //   "query-input": "required name=search_term_string",
-              // },
-              publisher: {
-                "@type": "Organization",
-                "@id": `http://${domain}`,
-              },
-            },
-            {
-              "@type": "ItemList",
-              url: `http://${domain}`,
-              name: "blog",
-              itemListElement: blog_list?.map((blog, index) => ({
-                "@type": "ListItem",
-                position: index + 1,
-                item: {
-                  "@type": "Article",
-                  url: `http://${domain}/${blog?.article_category}/${blog.title
-                    ?.replaceAll(" ", "-")
-                    ?.toLowerCase()}`,
-                  name: blog.title,
-                },
-              })),
-            },
-            {
-              "@type": "BreadcrumbList",
-              itemListElement: breadcrumbs.map((breadcrumb, index) => ({
-                "@type": "ListItem",
-                position: index + 1,
-                name: breadcrumb.label,
-                item: `http://${domain}${breadcrumb.url}`,
-              })),
             },
           ],
         }}
@@ -210,26 +130,40 @@ export default function PriavcyPolicy({
   );
 }
 
-export async function getServerSideProps({ req, query }) {
+export async function getServerSideProps({ req }) {
   const domain = getDomain(req?.headers?.host);
-  const meta = await callBackendApi({ domain, query, type: "meta_privacy" });
-  const logo = await callBackendApi({ domain, query, type: "logo" });
-  const favicon = await callBackendApi({ domain, query, type: "favicon" });
-  const blog_list = await callBackendApi({ domain, query, type: "blog_list" });
+
+  let layoutPages = await callBackendApi({
+    domain,
+    type: "layout",
+  });
+
+  const meta = await callBackendApi({ domain, type: "meta_privacy" });
+  const logo = await callBackendApi({ domain, type: "logo" });
+  const favicon = await callBackendApi({ domain, type: "favicon" });
+  const blog_list = await callBackendApi({ domain, type: "blog_list" });
   const categories = await callBackendApi({
     domain,
-    query,
     type: "categories",
   });
-  const contact_details = await callBackendApi({
+ 
+  const policy = await callBackendApi({ domain, type: "policy" });
+  const about_me = await callBackendApi({
     domain,
-    query,
-    type: "contact_details",
+    type: "about_me",
   });
-  const terms = await callBackendApi({ domain, query, type: "terms" });
-  const policy = await callBackendApi({ domain, query, type: "policy" });
-  const layout = await callBackendApi({ domain, type: "layout" });
-  const nav_type = await callBackendApi({ domain, type: "nav_type" });
+
+  let page = null;
+  if (Array.isArray(layoutPages?.data) && layoutPages.data.length > 0) {
+    const valueData = layoutPages.data[0].value;
+    page = valueData?.find((page) => page.page === "privacy policy");
+  }
+
+  if (!page?.enable) {
+    return {
+      notFound: true,
+    };
+  }
 
   let project_id = logo?.data[0]?.project_id || null;
   let imagePath = null;
@@ -241,14 +175,12 @@ export async function getServerSideProps({ req, query }) {
       imagePath,
       favicon: favicon?.data[0]?.file_name || null,
       logo: logo?.data[0] || null,
-      layout: layout?.data[0]?.value || null,
       blog_list: blog_list?.data[0]?.value || [],
       categories: categories?.data[0]?.value || null,
       meta: meta?.data[0]?.value || null,
-      contact_details: contact_details?.data[0]?.value,
-      terms: terms?.data[0]?.value || "",
       policy: policy?.data[0]?.value || "",
-      nav_type: nav_type?.data[0]?.value || {},
+      about_me: about_me?.data[0] || null,
+      page,
     },
   };
 }

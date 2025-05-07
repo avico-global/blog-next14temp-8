@@ -79,6 +79,21 @@ const FooterLinks = ({ categories }) => {
           >
             Contact Us
           </Link>
+          <Link
+            title="Privacy Policy"
+            href="/privacy-policy"
+            className="text-sm hover:text-primary1 "
+          >
+            Privacy Policy
+          </Link>
+          <Link
+            title="Terms and conditions"
+            href="/terms-and-conditions"
+            className="text-sm hover:text-primary1 "
+          >
+            Terms and Conditions
+          </Link>
+
           <Link title="Sitemap" href="/sitemap.xml" legacyBehavior>
             <a
               title="Sitemap"
