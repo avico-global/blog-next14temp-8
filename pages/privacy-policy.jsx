@@ -1,19 +1,19 @@
 import React, { useEffect } from "react";
-import Breadcrumbs from "@/components/common/Breadcrumbs";
-import useBreadcrumbs from "@/lib/useBreadcrumbs";
-import JsonLd from "@/json/JsonLd";
+import Breadcrumbs from "../components/common/Breadcrumbs";
+import useBreadcrumbs from "../lib/useBreadcrumbs";
+import JsonLd from "../json/JsonLd";
 import { useRouter } from "next/router";
-import Container from "@/components/common/Container";
-import Fullcontainer from "@/components/common/Fullcontainer";
-import Navbar from "@/components/containers/Navbar";
-import Footer from "@/components/containers/Footer";
-import GoogleTagManager from "@/lib/GoogleTagManager";
+import Container from "../components/common/Container";
+import Fullcontainer from "../components/common/FullContainer";
+import Navbar from "../components/containers/Navbar";
+import Footer from "../components/containers/Footer";
+import GoogleTagManager from "../lib/GoogleTagManager";
 import MarkdownIt from "markdown-it";
 import {
   callBackendApi,
   getDomain,
   getImagePath,
-} from "@/lib/myFun";
+} from "../lib/myFun";
 
 import Head from "next/head";
 import { Raleway } from "next/font/google";

@@ -1,18 +1,18 @@
 import React, { useEffect } from "react";
-import Container from "@/components/common/Container";
-import Navbar from "@/components/containers/Navbar";
-import Footer from "@/components/containers/Footer";
-import GoogleTagManager from "@/lib/GoogleTagManager";
+import Container from "../components/common/Container";
+import Navbar from "../components/containers/Navbar";
+import Footer from "../components/containers/Footer";
+import GoogleTagManager from "../lib/GoogleTagManager";
 import MarkdownIt from "markdown-it";
-import useBreadcrumbs from "@/lib/useBreadcrumbs";
-import { callBackendApi, getDomain, getImagePath } from "@/lib/myFun";
+import useBreadcrumbs from "../lib/useBreadcrumbs";
+import { callBackendApi, getDomain, getImagePath } from "../lib/myFun";
 
 import Head from "next/head";
 import { Raleway } from "next/font/google";
-import JsonLd from "@/json/JsonLd";
+import JsonLd from "../json/JsonLd";
 import { useRouter } from "next/router";
-import Fullcontainer from "@/components/common/Fullcontainer";
-import Breadcrumbs from "@/components/common/Breadcrumbs";
+import Fullcontainer from "../components/common/FullContainer";
+import Breadcrumbs from "../components/common/Breadcrumbs";
 const myFont = Raleway({
   subsets: ["cyrillic", "cyrillic-ext", "latin", "latin-ext"],
 });

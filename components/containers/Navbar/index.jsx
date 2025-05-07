@@ -22,6 +22,21 @@ export default function Navbar({
   const [searchQuery, setSearchQuery] = useState("");
 
   const closeSidebar = () => setSidebar(false);
+  
+  // Handle click outside search
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchInputRef.current && !searchInputRef.current.contains(event.target)) {
+        setSearchQuery("");
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   // Debounce search query
   const debounceSearch = useCallback(() => {
     if (searchQuery) {
