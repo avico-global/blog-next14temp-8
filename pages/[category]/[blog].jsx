@@ -123,15 +123,7 @@ export default function Blog({
               <article className="prose lg:prose-xl max-w-full text-white">
                 <div dangerouslySetInnerHTML={{ __html: content }} />
               </article>
-              <div className="mt-12">
-                <h3 className="text-lg font-semibold text-white">
-                  Share this article:
-                </h3>
-                <SocialShare
-                  url={`http://${domain}${myblog?.article_category}/${myblog?.key}`}
-                  title={myblog?.value.title}
-                />
-              </div>
+             
             </div>
             <Rightbar
               about_me={about_me}
