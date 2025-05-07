@@ -69,7 +69,7 @@ export default function Category({
           />
           <link rel="author" href={`http://${domain}`} />
           <link rel="publisher" href={`http://${domain}`} />
-          <link rel="canonical" href={`http://${domain}`} />
+          <link rel="canonical" href={`http://${domain}/${category}`} />
           <meta name="robots" content="noindex" />
           <meta name="theme-color" content="#008DE5" />
           <link rel="manifest" href="/manifest.json" />
