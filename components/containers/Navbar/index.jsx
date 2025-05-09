@@ -6,6 +6,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import Logo from "./Logo";
 import { sanitizeUrl } from "@/lib/myFun";
 import Container from "@/components/common/Container";
+import { useRouter } from "next/router";
 
 export default function Navbar({
   logo,
@@ -20,13 +21,19 @@ export default function Navbar({
   const searchInputRef = useRef(null);
   const [filteredBlogs, setFilteredBlogs] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const router = useRouter();
 
   const closeSidebar = () => setSidebar(false);
   
   // Handle click outside search
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (searchInputRef.current && !searchInputRef.current.contains(event.target)) {
+      // Check if click is outside both the input and the results container
+      if (searchInputRef.current && 
+          !searchInputRef.current.contains(event.target) && 
+          !event.target.closest('.search-results-container')) {
+        setIsSearchOpen(false);
         setSearchQuery("");
       }
     };
@@ -36,6 +43,12 @@ export default function Navbar({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  // Close search on page update
+  useEffect(() => {
+    setIsSearchOpen(false);
+    setSearchQuery("");
+  }, [router.asPath]);
 
   // Debounce search query
   const debounceSearch = useCallback(() => {
@@ -54,13 +67,24 @@ export default function Navbar({
     return () => clearTimeout(timeoutId);
   }, [searchQuery, debounceSearch]);
 
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    setIsSearchOpen(true);
+  };
+
+  const handleSearchClick = (e) => {
+    e.stopPropagation();
+    setIsSearchOpen(true);
+  };
+
+  const handleResultClick = (e) => {
+    e.stopPropagation();
+  };
+
   const toggleDropdown = () => {
     setIsDropdownOpen((prevState) => !prevState);
   };
 
-  const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
-  };
   return (
     <>
       <FullContainer className="sticky top-0 z-20 bg-theme text-white shadow py-2 lg:py-3 border-b border-gray-700">
@@ -100,19 +124,20 @@ export default function Navbar({
                 {/* Search Section */}
                 <div className="flex items-center justify-end gap-3 relative">
                   <div className="hidden lg:flex items-center border border-white/30 rounded-md px-4 gap-1">
-                    <Search className="  w-5 h-5  " aria-hidden="true" />
+                    <Search className="w-5 h-5" aria-hidden="true" />
                     <input
                       type="text"
                       value={searchQuery}
                       onChange={handleSearchChange}
+                      onClick={handleSearchClick}
                       className="p-2 transition-opacity duration-300 ease-in-out flex-1 outline-none bg-transparent"
                       placeholder="Search..."
                       ref={searchInputRef}
                     />
                   </div>
 
-                  {searchQuery && (
-                    <div className="absolute top-full p-3 right-0 bg-footer text-white shadow-2xl rounded-md mt-1 z-10 w-[calc(100vw-40px)] lg:w-[650px]">
+                  {isSearchOpen && searchQuery && (
+                    <div className="absolute top-full p-3 right-0 bg-footer text-white shadow-2xl rounded-md mt-1 z-10 w-[calc(100vw-40px)] lg:w-[650px] search-results-container">
                       {filteredBlogs.length > 0 ? (
                         filteredBlogs.map((item, index) => (
                           <Link
@@ -121,8 +146,9 @@ export default function Navbar({
                               item.article_category
                             )}/${sanitizeUrl(item?.title)}`}
                             title={item.title}
+                            onClick={handleResultClick}
                           >
-                            <div className="p-2 hover:bg-theme  border-b border-gray-400 text-gray-200">
+                            <div className="p-2 hover:bg-theme border-b border-gray-400 text-gray-200">
                               {item.title}
                             </div>
                           </Link>
