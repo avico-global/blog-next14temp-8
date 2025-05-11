@@ -25,14 +25,16 @@ export default function Navbar({
   const router = useRouter();
 
   const closeSidebar = () => setSidebar(false);
-  
+
   // Handle click outside search
   useEffect(() => {
     const handleClickOutside = (event) => {
       // Check if click is outside both the input and the results container
-      if (searchInputRef.current && 
-          !searchInputRef.current.contains(event.target) && 
-          !event.target.closest('.search-results-container')) {
+      if (
+        searchInputRef.current &&
+        !searchInputRef.current.contains(event.target) &&
+        !event.target.closest(".search-results-container")
+      ) {
         setIsSearchOpen(false);
         setSearchQuery("");
       }
@@ -84,6 +86,10 @@ export default function Navbar({
   const toggleDropdown = () => {
     setIsDropdownOpen((prevState) => !prevState);
   };
+  useEffect(() => {
+    setIsSearchOpen(false);
+    setSearchQuery("");
+  }, [router.asPath]);
 
   return (
     <>
@@ -135,7 +141,6 @@ export default function Navbar({
                       ref={searchInputRef}
                     />
                   </div>
-
                   {isSearchOpen && searchQuery && (
                     <div className="absolute top-full p-3 right-0 bg-footer text-white shadow-2xl rounded-md mt-1 z-10 w-[calc(100vw-40px)] lg:w-[650px] search-results-container">
                       {filteredBlogs.length > 0 ? (
@@ -192,7 +197,7 @@ export default function Navbar({
 
       {/* Sidebar */}
       <div
-        className={`sidebar fixed top-0 right-0 h-screen flex flex-col justify-between bg-theme shadow-lg text-white z-50 overflow-x-hidden p-10 lg:p-6 ${
+        className={`sidebar fixed top-0 right-0 h-screen flex flex-col justify-between bg-theme shadow-lg text-white z-50 overflow-x-hidden p-5 pt-10 lg:p-6 ${
           sidebar ? "open" : "-mr-96"
         }`}
       >
@@ -205,20 +210,21 @@ export default function Navbar({
             />
           </div>
 
-          <div className="relative w-full mt-8">
-            <div className="flex lg:hidden items-center gap-3 font-normal w-full">
-              <Search className="w-7" />
+          <div className="flex items-center justify-start gap-3 relative">
+            <div className="flex lg:hidden items-center border border-white/30 rounded-md px-4 mt-8 gap-1">
+              <Search className="w-5 h-5" aria-hidden="true" />
               <input
-                className="bg-transparent border-b border-white/50 pb-1 outline-none flex-1"
-                placeholder="Search..."
                 type="text"
                 value={searchQuery}
                 onChange={handleSearchChange}
+                onClick={handleSearchClick}
+                className="p-2 transition-opacity duration-300 ease-in-out flex-1 outline-none bg-transparent"
+                placeholder="Search..."
                 ref={searchInputRef}
               />
             </div>
-            {searchQuery && (
-              <div className="absolute left-0 top-full mt-2 bg-footer text-white shadow-2xl rounded-md z-10 w-full max-h-60 overflow-y-auto">
+            {isSearchOpen && searchQuery && (
+              <div className="absolute top-full p-3 border border-gray-100  left-0 bg-footer text-white shadow-2xl rounded-md mt-1 z-10 w-[calc(100vw-50px)] lg:w-[650px] search-results-container">
                 {filteredBlogs.length > 0 ? (
                   filteredBlogs.map((item, index) => (
                     <Link
@@ -227,6 +233,7 @@ export default function Navbar({
                         item.article_category
                       )}/${sanitizeUrl(item?.title)}`}
                       title={item.title}
+                      onClick={handleResultClick}
                     >
                       <div className="p-2 hover:bg-theme border-b border-gray-400 text-gray-200">
                         {item.title}
@@ -249,7 +256,6 @@ export default function Navbar({
                 className={cn(
                   "font-semibold text-white capitalize border-transparent transition-all py-2 px-2 border-b border-gray-600"
                 )}
-                onClick={closeSidebar}
               >
                 {item.title}
               </Link>
