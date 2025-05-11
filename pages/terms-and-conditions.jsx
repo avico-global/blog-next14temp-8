@@ -88,11 +88,13 @@ export default function Terms({
         imagePath={imagePath}
         categories={categories}
       />
-      <Container>
-        <Breadcrumbs className=" pt-28 " breadcrumbs={breadcrumbs} />
-      </Container>
+      <Fullcontainer>
+        <Container>
+          <Breadcrumbs className=" pt-8 lg:pt-28 " breadcrumbs={breadcrumbs} />
+        </Container>
+      </Fullcontainer>
 
-      <Fullcontainer className=" mt-12 ">
+      <Fullcontainer className=" mt-8 lg:mt-28 ">
         <Container>
           <div
             className="prose text-gray-200 max-w-full w-full mb-5 "

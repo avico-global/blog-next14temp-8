@@ -7,7 +7,7 @@ export default function Breadcrumbs({ breadcrumbs, className }) {
   return (
     <div
       className={cn(
-        "w-full flex items-center justify-center py-2 font-semibold text-gray-300",
+        "w-full flex items-center justify-start  lg:justify-center py-2 font-semibold text-gray-300",
         className
       )}
     >

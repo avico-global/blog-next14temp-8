@@ -88,12 +88,13 @@ blog_list
 
       <Fullcontainer>
         <Container>
-          <Breadcrumbs breadcrumbs={breadcrumbs} className="pt-28" />
+          <Breadcrumbs breadcrumbs={breadcrumbs} className="pt-8 lg:pt-28" />
         </Container>
       </Fullcontainer>
 
-      <Fullcontainer>
+      <Fullcontainer className=" mt-8 lg:mt-28 ">
         <Container>
+          <div className="text-gray-200 max-w-full w-full mb-5">hi</div>
           <div
             className="prose text-gray-200 max-w-full w-full mb-5"
             dangerouslySetInnerHTML={{ __html: content }}
